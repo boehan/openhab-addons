@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="comfoair"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+    xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+    <thing-type id="comfoair">
+        <label>Generic ComfoAir Ventilation System</label>
+        <description>Provides a generic access to a ComfoAir compatible ventilation system</description>
+
+        <channel-groups>
+            <channel-group id="sensorValues" typeId="sensorValues" />
+            <channel-group id="controls" typeId="controls" />
+            <channel-group id="status" typeId="status" />
+        </channel-groups>
+
+        <config-description>
+            <parameter name="port" type="text" required="true">
+                <label>Serial port</label>
+                <context>serial-port</context>
+                <description>Serial port that the ComfoAir is connected to</description>
+            </parameter>
+            <parameter name="refreshInterval" type="integer" max="65535" min="10" required="false">
+                <label>Refresh interval</label>
+                <description>Refresh interval in seconds</description>
+                <default>60</default>
+            </parameter>
+        </config-description>
+
+    </thing-type>
+    
+    <channel-group-type id="sensorValues">
+       <label>Sensor Values</label>
+       <channels>
+           <channel id="outdoor_temperature_in" typeId="outdoor_temperature_in" />
+           <channel id="outdoor_temperature_out" typeId="outdoor_temperature_out" />
+           <channel id="indoor_temperature_in" typeId="indoor_temperature_in" />
+           <channel id="indoor_temperature_out" typeId="indoor_temperature_out" />
+           <channel id="fan_incoming_percent" typeId="fan_incoming_percent" />
+           <channel id="fan_incoming_rpm" typeId="fan_incoming_rpm" />
+           <channel id="fan_outgoing_percent" typeId="fan_outgoing_percent" />
+           <channel id="fan_outgoing_rpm" typeId="fan_outgoing_rpm" />
+           <channel id="ewt_temperature" typeId="ewt_temperature" />
+           <channel id="ewt_temperature_low" typeId="ewt_temperature_low" />
+           <channel id="ewt_temperature_high" typeId="ewt_temperature_high" />
+           <channel id="ewt_speed" typeId="ewt_speed" />
+       </channels>
+    </channel-group-type>
+    
+    <channel-group-type id="controls">
+       <label>Controls</label>
+       <channels>
+           <channel id="activate" typeId="activate" />
+           <channel id="fan_level" typeId="fan_level" />
+           <channel id="filter_reset" typeId="filter_reset" />
+           <channel id="error_reset" typeId="error_reset" />
+       </channels>
+    </channel-group-type>
+    
+    <channel-group-type id="status">
+       <label>Status</label>
+       <channels>
+           <channel id="filter_duration" typeId="filter_duration" />
+           <channel id="error_message" typeId="error_message" />
+           <channel id="bypass_mode" typeId="bypass_mode" />
+       </channels>
+    </channel-group-type>
+
+    <channel-type id="activate">
+        <item-type>Switch</item-type>
+        <label>Activate binding control</label>
+        <description>Activate (control through openHAB) or deactivate (return control to CCEase) binding control</description>
+        <category>Switch</category>
+        <state readOnly="false"/>
+    </channel-type>
+    
+    <channel-type id="fan_level">
+        <item-type>Number</item-type>
+        <label>Fan level</label>
+        <description>Fan level</description>
+        <category>Number</category>
+        <state readOnly="false">
+            <options>
+                <option value="0">AUTO</option>
+                <option value="1">Away</option>
+                <option value="2">Level 1</option>
+                <option value="3">Level 2</option>
+                <option value="4">Level 3</option>
+            </options>
+        </state>
+    </channel-type>
+    
+    <channel-type id="target_temperature">
+        <item-type>Number:Temperature</item-type>
+        <label>Target temperature</label>
+        <description>Target (comfort) temperature</description>
+        <category>Temperature</category>
+        <state min="15" max="25" step="0.5" pattern="%.1f %unit%"/>
+    </channel-type>
+    
+    <channel-type id="outdoor_temperature_in">
+        <item-type>Number:Temperature</item-type>
+        <label>Outdoor temperature incoming</label>
+        <description>Intake air temperature (outside)</description>
+        <category>Temperature</category>
+        <state readOnly="true" pattern="%.1f %unit%"/>
+    </channel-type>
+    
+    <channel-type id="outdoor_temperature_out">
+        <item-type>Number:Temperature</item-type>
+        <label>Outdoor temperature outgoing</label>
+        <description>Outlet air temperature (outside)</description>
+        <category>Temperature</category>
+        <state readOnly="true" pattern="%.1f %unit%"/>
+    </channel-type>
+    
+    <channel-type id="indoor_temperature_in">
+        <item-type>Number:Temperature</item-type>
+        <label>Indoor temperature incoming</label>
+        <description>Inlet air temperature (inside)</description>
+        <category>Temperature</category>
+        <state readOnly="true" pattern="%.1f %unit%"/>
+    </channel-type>
+    
+    <channel-type id="indoor_temperature_out">
+        <item-type>Number:Temperature</item-type>
+        <label>Indoor temperature outgoing</label>
+        <description>Uptake air temperature (inside)</description>
+        <category>Temperature</category>
+        <state readOnly="true" pattern="%.1f %unit%"/>
+    </channel-type>
+    
+    <channel-type id="fan_incoming_percent">
+        <item-type>Number</item-type>
+        <label>Incoming air fan speed (%)</label>
+        <description>Relative incoming air fan speed in percent</description>
+        <category>Number</category>
+        <state readOnly="true"/>
+    </channel-type>
+    
+    <channel-type id="fan_incoming_rpm">
+        <item-type>Number</item-type>
+        <label>Incoming air fan speed (RPM)</label>
+        <description>Absolute incoming air fan speed (RPM)</description>
+        <category>Number</category>
+        <state readOnly="true"/>
+    </channel-type>
+    
+    <channel-type id="fan_outgoing_percent">
+        <item-type>Number</item-type>
+        <label>Outgoing air fan speed (%)</label>
+        <description>Relative outgoing air fan speed in percent</description>
+        <category>Number</category>
+        <state readOnly="true"/>
+    </channel-type>
+    
+    <channel-type id="fan_outgoing_rpm">
+        <item-type>Number</item-type>
+        <label>Outgoing air fan speed (RPM)</label>
+        <description>Absolute outgoing air fan speed (RPM)</description>
+        <category>Number</category>
+        <state readOnly="true"/>
+    </channel-type>
+    
+    <channel-type id="filter_duration">
+        <item-type>Number</item-type>
+        <label>Filter duration</label>
+        <description>Operating hours of the filter</description>
+        <category>Number</category>
+        <state readOnly="true"/>
+    </channel-type>
+    
+    <channel-type id="filter_reset">
+        <item-type>Switch</item-type>
+        <label>Reset filter</label>
+        <description>Reset operating hours of the filter</description>
+        <category>Switch</category>
+        <state readOnly="false"/>
+    </channel-type>
+    
+    <channel-type id="error_message">
+        <item-type>String</item-type>
+        <label>Error message</label>
+        <description>Pending error messages</description>
+        <category>String</category>
+        <state readOnly="true"/>
+    </channel-type>
+    
+    <channel-type id="error_reset">
+        <item-type>Switch</item-type>
+        <label>Reset errors</label>
+        <description>Reset all error messages</description>
+        <category>Switch</category>
+        <state readOnly="false"/>
+    </channel-type>
+    
+    <channel-type id="ewt_temperature">
+        <item-type>Number:Temperature</item-type>
+        <label>EWT temperature</label>
+        <description>Temperature of the geothermal heat exchanger</description>
+        <category>Temperature</category>
+        <state readOnly="true" pattern="%.1f %unit%"/>
+    </channel-type>
+    
+    <channel-type id="ewt_temperature_low">
+        <item-type>Number:Temperature</item-type>
+        <label>EWT temperature (low)</label>
+        <description>Lower temperature of the geothermal heat exchanger</description>
+        <category>Temperature</category>
+        <state readOnly="true" pattern="%.1f %unit%"/>
+    </channel-type>
+    
+    <channel-type id="ewt_temperature_high">
+        <item-type>Number:Temperature</item-type>
+        <label>EWT temperature (high)</label>
+        <description>Upper temperature of the geothermal heat exchanger</description>
+        <category>Temperature</category>
+        <state readOnly="true" pattern="%.1f %unit%"/>
+    </channel-type>
+    
+    <channel-type id="ewt_speed">
+        <item-type>Number</item-type>
+        <label>EWT speed up (%)</label>
+        <description>Speed up of the geothermal heat exchanger</description>
+        <category>Number</category>
+        <state readOnly="true"/>
+    </channel-type>
+    
+    <channel-type id="bypass_mode">
+        <item-type>Switch</item-type>
+        <label>Bypass mode</label>
+        <description>State of the bypass flap</description>
+        <category>Switch</category>
+        <state readOnly="true"/>
+    </channel-type>
+
+</thing:thing-descriptions>
