@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2019 Contributors to the openHAB project
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -47,7 +47,7 @@ public class ComfoAirSerialConnector implements SerialPortEventListener {
 
     private boolean isSuspended = true;
 
-    private boolean connected;
+    private boolean connected = false;
     private final String serialPortName;
     private final int baudRate;
     private SerialPort serialPort;
@@ -72,9 +72,7 @@ public class ComfoAirSerialConnector implements SerialPortEventListener {
         try {
             SerialPortIdentifier portIdentifier = serialPortManager.getIdentifier(serialPortName);
             if (portIdentifier != null) {
-                SerialPort commPort = portIdentifier.open(this.getClass().getName(), 3000);
-
-                serialPort = commPort;
+                serialPort = portIdentifier.open(this.getClass().getName(), 3000);
                 serialPort.setSerialPortParams(baudRate, SerialPort.DATABITS_8, SerialPort.STOPBITS_1,
                         SerialPort.PARITY_NONE);
                 serialPort.enableReceiveThreshold(1);
@@ -162,7 +160,8 @@ public class ComfoAirSerialConnector implements SerialPortEventListener {
                 requestData = buildRequestData(command, preRequestData);
 
                 if (requestData == null) {
-                    logger.debug(String.format("Unable to build data for write command: %02x", command.getReplyCmd()));
+                    logger.debug("Unable to build data for write command: {}",
+                            String.format("%02x", command.getReplyCmd()));
                     return null;
                 }
             }
@@ -249,7 +248,7 @@ public class ComfoAirSerialConnector implements SerialPortEventListener {
                             // checksum
                             if (calculateChecksum(_block) == checksum) {
 
-                                logger.trace(String.format("receive CMD: %02x ", command.getReplyCmd()) + " DATA: {}",
+                                logger.trace("receive CMD: {} DATA: {}", String.format("%02x", command.getReplyCmd()),
                                         dumpData(replyData));
 
                                 send(ACK);
@@ -262,13 +261,13 @@ public class ComfoAirSerialConnector implements SerialPortEventListener {
                             logger.debug("Unable to handle data. Data size not valid");
                         }
 
-                        logger.trace(String.format("skip CMD: %02x ", command.getReplyCmd()) + " DATA: {}",
+                        logger.trace("skip CMD: {} DATA: {}", String.format("%02x", command.getReplyCmd()),
                                 dumpData(cleanedBlock));
                     }
                 }
 
             } catch (IOException e) {
-                logger.debug(e.getMessage(), e);
+                logger.debug("IO error: {}", e.getMessage());
             }
 
             try {

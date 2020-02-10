@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2019 Contributors to the openHAB project
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -12,15 +12,24 @@
  */
 package org.openhab.binding.comfoair.internal;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
+
 /**
  * The {@link ComfoAirConfiguration} class contains fields mapping thing configuration parameters.
  *
  * @author Hans Böhm - Initial contribution
  */
+@NonNullByDefault
 public class ComfoAirConfiguration {
 
     /**
-     * Sample configuration parameter. Replace with your own.
+     * Serial port used for communication.
      */
-    public String config1;
+    public @Nullable String serialPort;
+
+    /**
+     * Polling interval for state refresh.
+     */
+    public int refreshInterval;
 }

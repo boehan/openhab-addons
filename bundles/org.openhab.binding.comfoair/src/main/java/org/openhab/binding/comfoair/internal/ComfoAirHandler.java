@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2019 Contributors to the openHAB project
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -12,7 +12,6 @@
  */
 package org.openhab.binding.comfoair.internal;
 
-import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -21,6 +20,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.thing.Channel;
 import org.eclipse.smarthome.core.thing.ChannelUID;
@@ -43,15 +44,14 @@ import org.slf4j.LoggerFactory;
  *
  * @author Hans Böhm - Initial contribution
  */
-
+@NonNullByDefault
 public class ComfoAirHandler extends BaseThingHandler {
+    private static final int DEFAULT_REFRESH_INTERVAL = 60;
 
     private final Logger logger = LoggerFactory.getLogger(ComfoAirHandler.class);
-    private long refreshInterval = 60L;
-    private String port;
-    private ScheduledFuture<?> poller;
+    private @Nullable ScheduledFuture<?> poller;
     private SerialPortManager serialPortManager;
-    private ComfoAirSerialConnector comfoAirConnector;
+    private @Nullable ComfoAirSerialConnector comfoAirConnector;
 
     public static final int BAUDRATE = 9600;
 
@@ -69,9 +69,6 @@ public class ComfoAirHandler extends BaseThingHandler {
             if (channel != null) {
                 updateChannelState(channel);
             }
-            // final ComfoAirCommand readCommand = ComfoAirCommandType.getReadCommand(commandKey);
-            // logger.debug("Refreshing state for channel: {}", commandKey);
-            // sendCommand(readCommand, commandKey);
         } else {
             try {
                 final Set<ChannelUID> channelsLinked = getThing().getChannels().stream().map(Channel::getUID)
@@ -100,18 +97,17 @@ public class ComfoAirHandler extends BaseThingHandler {
 
     @Override
     public void initialize() {
-        refreshInterval = ((BigDecimal) getThing().getConfiguration().get("refreshInterval")).longValue();
-        port = (String) getThing().getConfiguration().get("port");
+        ComfoAirConfiguration config = getConfigAs(ComfoAirConfiguration.class);
+        String serialPort = (config.serialPort != null) ? config.serialPort : "";
 
-        if (StringUtils.isNotEmpty(port)) {
-            comfoAirConnector = new ComfoAirSerialConnector(serialPortManager, port, BAUDRATE);
+        if (StringUtils.isNotEmpty(serialPort)) {
+            comfoAirConnector = new ComfoAirSerialConnector(serialPortManager, serialPort, BAUDRATE);
         } else {
             updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
             return;
         }
-
-        comfoAirConnector.open();
-        if (comfoAirConnector.isConnected()) {
+        if (comfoAirConnector != null) {
+            comfoAirConnector.open();
             updateStatus(ThingStatus.ONLINE);
 
             List<Channel> channels = this.thing.getChannels();
@@ -120,7 +116,7 @@ public class ComfoAirHandler extends BaseThingHandler {
                 for (Channel channel : channels) {
                     updateChannelState(channel);
                 }
-            }, 0, refreshInterval, TimeUnit.SECONDS);
+            }, 0, (config.refreshInterval > 0) ? config.refreshInterval : DEFAULT_REFRESH_INTERVAL, TimeUnit.SECONDS);
         } else {
             updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR);
         }
@@ -139,18 +135,6 @@ public class ComfoAirHandler extends BaseThingHandler {
             poller = null;
         }
     }
-    //
-    // private void refreshStatus() {
-    // List<ChannelUID> channelsLinked = getThing().getChannels().stream().map(Channel::getUID).filter(this::isLinked)
-    // .collect(Collectors.toList());
-    // List<String> keysToUpdate = channelsLinked.stream().map(ChannelUID::getId).collect(Collectors.toList());
-    //
-    // for (String commandKey : keysToUpdate) {
-    // final ComfoAirCommand readCommand = ComfoAirCommandType.getReadCommand(commandKey);
-    // logger.debug("Refreshing state for channel: {}", commandKey);
-    // sendCommand(readCommand, commandKey);
-    // }
-    // }
 
     private void updateChannelState(Channel channel) {
         try {
@@ -202,7 +186,7 @@ public class ComfoAirHandler extends BaseThingHandler {
                 preReplyCmd = replyCmd;
         }
 
-        if (preRequestCmd != requestCmd) {
+        if (!preRequestCmd.equals(requestCmd)) {
             command.setRequestCmd(preRequestCmd);
             command.setReplyCmd(preReplyCmd);
             command.setRequestData(null);

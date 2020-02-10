@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2019 Contributors to the openHAB project
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -18,8 +18,8 @@ import java.util.List;
 /**
  * Class to encapsulate all data which is needed to send a cmd to comfoair
  *
- * @author Holger Hees
- * @since 1.3.0
+ * @author Holger Hees - Initial Contribution
+ * @author Hans Böhm - Refactoring
  */
 public class ComfoAirCommand {
 

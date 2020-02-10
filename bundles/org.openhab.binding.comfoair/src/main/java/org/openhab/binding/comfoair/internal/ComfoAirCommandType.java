@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2019 Contributors to the openHAB project
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -34,8 +34,8 @@ import org.slf4j.LoggerFactory;
 /**
  * Represents all valid commands which could be processed by this binding
  *
- * @author Holger Hees
- * @since 1.3.0
+ * @author Holger Hees - Initial Contribution
+ * @author Hans Böhm - Refactoring
  */
 public enum ComfoAirCommandType {
 
@@ -71,7 +71,7 @@ public enum ComfoAirCommandType {
      */
     ACTIVATE {
         {
-            key = "controls#activate";
+            key = "bindingControl#activate";
             data_type = DataTypeBoolean.class;
             possible_values = new int[] { 0x03 };
             change_command = 0x9b;
@@ -87,7 +87,7 @@ public enum ComfoAirCommandType {
 
     MENU20_MODE {
         {
-            key = "menu20_mode";
+            key = "menuP1#menu20Mode";
             data_type = DataTypeBoolean.class;
             read_command = 0xd5;
             read_reply_command = 0xd6;
@@ -98,7 +98,7 @@ public enum ComfoAirCommandType {
 
     MENU21_MODE {
         {
-            key = "menu21_mode";
+            key = "menuP1#menu21Mode";
             data_type = DataTypeBoolean.class;
             read_command = 0xd5;
             read_reply_command = 0xd6;
@@ -109,7 +109,7 @@ public enum ComfoAirCommandType {
 
     MENU22_MODE {
         {
-            key = "menu22_mode";
+            key = "menuP1#menu22Mode";
             data_type = DataTypeBoolean.class;
             read_command = 0xd5;
             read_reply_command = 0xd6;
@@ -120,7 +120,7 @@ public enum ComfoAirCommandType {
 
     MENU23_MODE {
         {
-            key = "menu23_mode";
+            key = "menuP1#menu23Mode";
             data_type = DataTypeBoolean.class;
             read_command = 0xd5;
             read_reply_command = 0xd6;
@@ -131,7 +131,7 @@ public enum ComfoAirCommandType {
 
     MENU24_MODE {
         {
-            key = "menu24_mode";
+            key = "menuP1#menu24Mode";
             data_type = DataTypeBoolean.class;
             read_command = 0xd5;
             read_reply_command = 0xd6;
@@ -142,7 +142,7 @@ public enum ComfoAirCommandType {
 
     MENU25_MODE {
         {
-            key = "menu25_mode";
+            key = "menuP1#menu25Mode";
             data_type = DataTypeBoolean.class;
             read_command = 0xd5;
             read_reply_command = 0xd6;
@@ -153,7 +153,7 @@ public enum ComfoAirCommandType {
 
     MENU26_MODE {
         {
-            key = "menu26_mode";
+            key = "menuP1#menu26Mode";
             data_type = DataTypeBoolean.class;
             read_command = 0xd5;
             read_reply_command = 0xd6;
@@ -164,7 +164,7 @@ public enum ComfoAirCommandType {
 
     MENU27_MODE {
         {
-            key = "menu27_mode";
+            key = "menuP1#menu27Mode";
             data_type = DataTypeBoolean.class;
             read_command = 0xd5;
             read_reply_command = 0xd6;
@@ -175,7 +175,7 @@ public enum ComfoAirCommandType {
 
     MENU28_MODE {
         {
-            key = "menu28_mode";
+            key = "menuP1#menu28Mode";
             data_type = DataTypeBoolean.class;
             read_command = 0xd5;
             read_reply_command = 0xd6;
@@ -186,7 +186,7 @@ public enum ComfoAirCommandType {
 
     MENU29_MODE {
         {
-            key = "menu29_mode";
+            key = "menuP1#menu29Mode";
             data_type = DataTypeBoolean.class;
             read_command = 0xd5;
             read_reply_command = 0xd6;
@@ -197,12 +197,12 @@ public enum ComfoAirCommandType {
 
     BATHROOM_START_DELAY {
         {
-            key = "bathroom_start_delay";
+            key = "menuP2#bathroomStartDelay";
             data_type = DataTypeNumber.class;
             change_command = 0xcb;
             change_data_size = 8;
             change_data_pos = 0;
-            change_affected = new String[] { "menu21_mode" };
+            change_affected = new String[] { "menuP1#menu21Mode" };
             read_command = 0xc9;
             read_reply_command = 0xca;
             read_reply_data_pos = new int[] { 0 };
@@ -211,12 +211,12 @@ public enum ComfoAirCommandType {
 
     BATHROOM_END_DELAY {
         {
-            key = "bathroom_end_delay";
+            key = "menuP2#bathroomEndDelay";
             data_type = DataTypeNumber.class;
             change_command = 0xcb;
             change_data_size = 8;
             change_data_pos = 1;
-            change_affected = new String[] { "menu22_mode" };
+            change_affected = new String[] { "menuP1#menu22Mode" };
             read_command = 0xc9;
             read_reply_command = 0xca;
             read_reply_data_pos = new int[] { 1 };
@@ -225,68 +225,68 @@ public enum ComfoAirCommandType {
 
     L1_END_DELAY {
         {
-            key = "L1_end_delay";
+            key = "menuP2#L1EndDelay";
             data_type = DataTypeNumber.class;
             change_command = 0xcb;
             change_data_size = 8;
             change_data_pos = 2;
-            change_affected = new String[] { "menu27_mode" };
+            change_affected = new String[] { "menuP1#menu27Mode" };
             read_command = 0xc9;
             read_reply_command = 0xca;
             read_reply_data_pos = new int[] { 2 };
         }
     },
 
-    LEVEL3_DELAY {
+    PULSE_VENTILATION {
         {
-            key = "level3_delay";
+            key = "menuP2#pulseVentilation";
             data_type = DataTypeNumber.class;
             change_command = 0xcb;
             change_data_size = 8;
             change_data_pos = 3;
-            change_affected = new String[] { "menu23_mode" };
+            change_affected = new String[] { "menuP1#menu23Mode" };
             read_command = 0xc9;
             read_reply_command = 0xca;
             read_reply_data_pos = new int[] { 3 };
         }
     },
 
-    FILTER_PERIOD {
+    FILTER_WEEKS {
         {
-            key = "filter_period";
+            key = "menuP2#filterWeeks";
             data_type = DataTypeNumber.class;
             change_command = 0xcb;
             change_data_size = 8;
             change_data_pos = 4;
-            change_affected = new String[] { "menu24_mode" };
+            change_affected = new String[] { "menuP1#menu24Mode" };
             read_command = 0xc9;
             read_reply_command = 0xca;
             read_reply_data_pos = new int[] { 4 };
         }
     },
 
-    RF_LOW_DELAY {
+    RF_SHORT_DELAY {
         {
-            key = "RF_low_delay";
+            key = "menuP2#RFShortDelay";
             data_type = DataTypeNumber.class;
             change_command = 0xcb;
             change_data_size = 8;
             change_data_pos = 5;
-            change_affected = new String[] { "menu25_mode" };
+            change_affected = new String[] { "menuP1#menu25Mode" };
             read_command = 0xc9;
             read_reply_command = 0xca;
             read_reply_data_pos = new int[] { 5 };
         }
     },
 
-    RF_HIGH_DELAY {
+    RF_LONG_DELAY {
         {
-            key = "RF_high_delay";
+            key = "menuP2#RFLongDelay";
             data_type = DataTypeNumber.class;
             change_command = 0xcb;
             change_data_size = 8;
             change_data_pos = 6;
-            change_affected = new String[] { "menu26_mode" };
+            change_affected = new String[] { "menuP1#menu26Mode" };
             read_command = 0xc9;
             read_reply_command = 0xca;
             read_reply_data_pos = new int[] { 6 };
@@ -295,12 +295,12 @@ public enum ComfoAirCommandType {
 
     COOKERHOOD_DELAY {
         {
-            key = "cookerhood_delay";
+            key = "menuP2#cookerhoodDelay";
             data_type = DataTypeNumber.class;
             change_command = 0xcb;
             change_data_size = 8;
             change_data_pos = 7;
-            change_affected = new String[] { "menu20_mode" };
+            change_affected = new String[] { "menuP1#menu20Mode" };
             read_command = 0xc9;
             read_reply_command = 0xca;
             read_reply_data_pos = new int[] { 7 };
@@ -309,12 +309,12 @@ public enum ComfoAirCommandType {
 
     FAN_OUT_0 {
         {
-            key = "fan_out_0";
+            key = "ventilation#fanOut0";
             data_type = DataTypeNumber.class;
             change_command = 0xcf;
             change_data_size = 9;
             change_data_pos = 0;
-            change_affected = new String[] { "outgoing_fan", "fan_out_efficiency", "fan_out_speed" };
+            change_affected = new String[] { "ventilation#fanOutPercent", "ventilation#fanOutRPM" };
             read_command = 0xcd;
             read_reply_command = 0xce;
             read_reply_data_pos = new int[] { 0 };
@@ -323,12 +323,12 @@ public enum ComfoAirCommandType {
 
     FAN_OUT_1 {
         {
-            key = "fan_out_1";
+            key = "ventilation#fanOut1";
             data_type = DataTypeNumber.class;
             change_command = 0xcf;
             change_data_size = 9;
             change_data_pos = 1;
-            change_affected = new String[] { "outgoing_fan", "fan_out_efficiency", "fan_out_speed" };
+            change_affected = new String[] { "ventilation#fanOutPercent", "ventilation#fanOutRPM" };
             read_command = 0xcd;
             read_reply_command = 0xce;
             read_reply_data_pos = new int[] { 1 };
@@ -337,12 +337,12 @@ public enum ComfoAirCommandType {
 
     FAN_OUT_2 {
         {
-            key = "fan_out_2";
+            key = "ventilation#fanOut2";
             data_type = DataTypeNumber.class;
             change_command = 0xcf;
             change_data_size = 9;
             change_data_pos = 2;
-            change_affected = new String[] { "outgoing_fan", "fan_out_efficiency", "fan_out_speed" };
+            change_affected = new String[] { "ventilation#fanOutPercent", "ventilation#fanOutRPM" };
             read_command = 0xcd;
             read_reply_command = 0xce;
             read_reply_data_pos = new int[] { 2 };
@@ -351,12 +351,12 @@ public enum ComfoAirCommandType {
 
     FAN_OUT_3 {
         {
-            key = "fan_out_3";
+            key = "ventilation#fanOut3";
             data_type = DataTypeNumber.class;
             change_command = 0xcf;
             change_data_size = 9;
             change_data_pos = 6;
-            change_affected = new String[] { "outgoing_fan", "fan_out_efficiency", "fan_out_speed" };
+            change_affected = new String[] { "ventilation#fanOutPercent", "ventilation#fanOutRPM" };
             read_command = 0xcd;
             read_reply_command = 0xce;
             read_reply_data_pos = new int[] { 10 };
@@ -365,12 +365,12 @@ public enum ComfoAirCommandType {
 
     FAN_IN_0 {
         {
-            key = "fan_in_0";
+            key = "ventilation#fanIn0";
             data_type = DataTypeNumber.class;
             change_command = 0xcf;
             change_data_size = 9;
             change_data_pos = 3;
-            change_affected = new String[] { "incomming_fan", "fan_in_efficiency", "fan_in_speed" };
+            change_affected = new String[] { "ventilation#fanInPercent", "ventilation#fanInRPM" };
             read_command = 0xcd;
             read_reply_command = 0xce;
             read_reply_data_pos = new int[] { 3 };
@@ -379,12 +379,12 @@ public enum ComfoAirCommandType {
 
     FAN_IN_1 {
         {
-            key = "fan_in_1";
+            key = "ventilation#fanIn1";
             data_type = DataTypeNumber.class;
             change_command = 0xcf;
             change_data_size = 9;
             change_data_pos = 4;
-            change_affected = new String[] { "incomming_fan", "fan_in_efficiency", "fan_in_speed" };
+            change_affected = new String[] { "ventilation#fanInPercent", "ventilation#fanInRPM" };
             read_command = 0xcd;
             read_reply_command = 0xce;
             read_reply_data_pos = new int[] { 4 };
@@ -393,12 +393,12 @@ public enum ComfoAirCommandType {
 
     FAN_IN_2 {
         {
-            key = "fan_in_2";
+            key = "ventilation#fanIn2";
             data_type = DataTypeNumber.class;
             change_command = 0xcf;
             change_data_size = 9;
             change_data_pos = 5;
-            change_affected = new String[] { "incomming_fan", "fan_in_efficiency", "fan_in_speed" };
+            change_affected = new String[] { "ventilation#fanInPercent", "ventilation#fanInRPM" };
             read_command = 0xcd;
             read_reply_command = 0xce;
             read_reply_data_pos = new int[] { 5 };
@@ -407,21 +407,21 @@ public enum ComfoAirCommandType {
 
     FAN_IN_3 {
         {
-            key = "fan_in_3";
+            key = "ventilation#fanIn3";
             data_type = DataTypeNumber.class;
             change_command = 0xcf;
             change_data_size = 9;
             change_data_pos = 7;
-            change_affected = new String[] { "incomming_fan", "fan_in_efficiency", "fan_in_speed" };
+            change_affected = new String[] { "ventilation#fanInPercent", "ventilation#fanInRPM" };
             read_command = 0xcd;
             read_reply_command = 0xce;
             read_reply_data_pos = new int[] { 11 };
         }
     },
 
-    FAN_IN_EFFICIENCY {
+    FAN_IN_PERCENT {
         {
-            key = "fan_in_efficiency";
+            key = "ventilation#fanInPercent";
             data_type = DataTypeNumber.class;
             read_command = 0x0b;
             read_reply_command = 0x0c;
@@ -429,9 +429,9 @@ public enum ComfoAirCommandType {
         }
     },
 
-    FAN_OUT_EFFICIENCY {
+    FAN_OÚT_PERCENT {
         {
-            key = "fan_out_efficiency";
+            key = "ventilation#fanOutPercent";
             data_type = DataTypeNumber.class;
             read_command = 0x0b;
             read_reply_command = 0x0c;
@@ -439,9 +439,9 @@ public enum ComfoAirCommandType {
         }
     },
 
-    FAN_IN_SPEED {
+    FAN_IN_RPM {
         {
-            key = "fan_in_speed";
+            key = "ventilation#fanInRPM";
             data_type = DataTypeRPM.class;
             read_command = 0x0b;
             read_reply_command = 0x0c;
@@ -449,9 +449,9 @@ public enum ComfoAirCommandType {
         }
     },
 
-    FAN_OUT_SPEED {
+    FAN_OUT_RPM {
         {
-            key = "fan_out_speed";
+            key = "ventilation#fanOutRPM";
             data_type = DataTypeRPM.class;
             read_command = 0x0b;
             read_reply_command = 0x0c;
@@ -461,77 +461,37 @@ public enum ComfoAirCommandType {
 
     FAN_LEVEL {
         {
-            key = "controls#fan_level";
+            key = "ccease#fanLevel";
             data_type = DataTypeNumber.class;
             possible_values = new int[] { 0x01, 0x02, 0x03, 0x04 };
             change_command = 0x99;
             change_data_size = 1;
             change_data_pos = 0;
-            change_affected = new String[] { "auto_mode", "incomming_fan", "outgoing_fan", "fan_in_efficiency",
-                    "fan_out_efficiency", "fan_in_speed", "fan_out_speed" };
+            change_affected = new String[] { "ventilation#fanInPercent", "ventilation#fanOutPercent",
+                    "ventilation#fanInRPM", "ventilation#fanOutRPM" };
             read_command = 0xcd;
             read_reply_command = 0xce;
             read_reply_data_pos = new int[] { 8 };
         }
     },
 
-    INCOMMING_FAN {
-        {
-            key = "incomming_fan";
-            data_type = DataTypeNumber.class;
-            read_command = 0x0b;
-            read_reply_command = 0x0c;
-            read_reply_data_pos = new int[] { 0 };
-        }
-    },
-
-    OUTGOING_FAN {
-        {
-            key = "outgoing_fan";
-            data_type = DataTypeNumber.class;
-            read_command = 0x0b;
-            read_reply_command = 0x0c;
-            read_reply_data_pos = new int[] { 1 };
-        }
-    },
-
-    HEATER_TEMPERATUR {
-        {
-            key = "heater_temperatur";
-            data_type = DataTypeTemperature.class;
-            read_command = 0xd1;
-            read_reply_command = 0xd2;
-            read_reply_data_pos = new int[] { 7 };
-        }
-    },
-
     TARGET_TEMPERATUR {
         {
-            key = "target_temperatur";
+            key = "ccease#targetTemperature";
             data_type = DataTypeTemperature.class;
             change_command = 0xd3;
             change_data_size = 1;
             change_data_pos = 0;
-            change_affected = new String[] { "bypass_mode" };
+            change_affected = new String[] { "bypass#bypassFactor", "bypass#bypassLevel",  "bypass#bypassSummer"};
             read_command = 0xd1;
             read_reply_command = 0xd2;
             read_reply_data_pos = new int[] { 0 };
         }
     },
 
-    COOKERHOOD_TEMPERATUR {
+    OUTDOOR_TEMPERATURE_IN {
         {
-            key = "cookerhood_temperatur";
-            data_type = DataTypeTemperature.class;
-            read_command = 0xd1;
-            read_reply_command = 0xd2;
-            read_reply_data_pos = new int[] { 8 };
-        }
-    },
-
-    OUTDOOR_INCOMMING_TEMPERATUR {
-        {
-            key = "outdoor_incomming_temperatur";
+            key = "temperatures#outdoorTemperatureIn";
             data_type = DataTypeTemperature.class;
             read_command = 0xd1;
             read_reply_command = 0xd2;
@@ -539,9 +499,9 @@ public enum ComfoAirCommandType {
         }
     },
 
-    OUTDOOR_OUTGOING_TEMPERATUR {
+    OUTDOOR_TEMPERATURE_OUT {
         {
-            key = "outdoor_outgoing_temperatur";
+            key = "temperatures#outdoorTemperatureOut";
             data_type = DataTypeTemperature.class;
             read_command = 0xd1;
             read_reply_command = 0xd2;
@@ -549,9 +509,9 @@ public enum ComfoAirCommandType {
         }
     },
 
-    INDOOR_INCOMMING_TEMPERATUR {
+    INDOOR_TEMPERATURE_IN {
         {
-            key = "indoor_incomming_temperatur";
+            key = "temperatures#indoorTemperatureIn";
             data_type = DataTypeTemperature.class;
             read_command = 0xd1;
             read_reply_command = 0xd2;
@@ -559,9 +519,9 @@ public enum ComfoAirCommandType {
         }
     },
 
-    INDOOR_OUTGOING_TEMPERATUR {
+    INDOOR_TEMPERATURE_OUT {
         {
-            key = "indoor_outgoing_temperatur";
+            key = "temperatures#indoorTemperatureOut";
             data_type = DataTypeTemperature.class;
             read_command = 0xd1;
             read_reply_command = 0xd2;
@@ -569,19 +529,9 @@ public enum ComfoAirCommandType {
         }
     },
 
-    EWT_TEMPERATUR {
-        {
-            key = "ewt_temperatur";
-            data_type = DataTypeTemperature.class;
-            read_command = 0xd1;
-            read_reply_command = 0xd2;
-            read_reply_data_pos = new int[] { 6 };
-        }
-    },
-
     IS_T1_SENSOR {
         {
-            key = "is_T1_sensor";
+            key = "temperatures#isT1Sensor";
             data_type = DataTypeBoolean.class;
             read_command = 0xd1;
             read_reply_command = 0xd2;
@@ -592,7 +542,7 @@ public enum ComfoAirCommandType {
 
     IS_T2_SENSOR {
         {
-            key = "is_T2_sensor";
+            key = "temperatures#isT2Sensor";
             data_type = DataTypeBoolean.class;
             read_command = 0xd1;
             read_reply_command = 0xd2;
@@ -603,7 +553,7 @@ public enum ComfoAirCommandType {
 
     IS_T3_SENSOR {
         {
-            key = "is_T3_sensor";
+            key = "temperatures#isT3Sensor";
             data_type = DataTypeBoolean.class;
             read_command = 0xd1;
             read_reply_command = 0xd2;
@@ -614,7 +564,7 @@ public enum ComfoAirCommandType {
 
     IS_T4_SENSOR {
         {
-            key = "is_T4_sensor";
+            key = "temperatures#isT4Sensor";
             data_type = DataTypeBoolean.class;
             read_command = 0xd1;
             read_reply_command = 0xd2;
@@ -625,7 +575,7 @@ public enum ComfoAirCommandType {
 
     IS_EWT_SENSOR {
         {
-            key = "is_EWT_sensor";
+            key = "temperatures#isEWTSensor";
             data_type = DataTypeBoolean.class;
             read_command = 0xd1;
             read_reply_command = 0xd2;
@@ -636,7 +586,7 @@ public enum ComfoAirCommandType {
 
     IS_HEATER_SENSOR {
         {
-            key = "is_heater_sensor";
+            key = "temperatures#isHeaterSensor";
             data_type = DataTypeBoolean.class;
             read_command = 0xd1;
             read_reply_command = 0xd2;
@@ -647,7 +597,7 @@ public enum ComfoAirCommandType {
 
     IS_COOKERHOOD_SENSOR {
         {
-            key = "is_cookerhood_sensor";
+            key = "temperatures#isCookerhoodSensor";
             data_type = DataTypeBoolean.class;
             read_command = 0xd1;
             read_reply_command = 0xd2;
@@ -656,15 +606,106 @@ public enum ComfoAirCommandType {
         }
     },
 
+    EWT_TEMPERATUR {
+        {
+            key = "temperatures#ewtTemperature";
+            data_type = DataTypeTemperature.class;
+            read_command = 0xd1;
+            read_reply_command = 0xd2;
+            read_reply_data_pos = new int[] { 6 };
+        }
+    },
+
+    HEATER_TEMPERATUR {
+        {
+            key = "temperatures#heaterTemperature";
+            data_type = DataTypeTemperature.class;
+            read_command = 0xd1;
+            read_reply_command = 0xd2;
+            read_reply_data_pos = new int[] { 7 };
+        }
+    },
+
+    COOKERHOOD_TEMPERATUR {
+        {
+            key = "temperatures#cookerhoodTemperature";
+            data_type = DataTypeTemperature.class;
+            read_command = 0xd1;
+            read_reply_command = 0xd2;
+            read_reply_data_pos = new int[] { 8 };
+        }
+    },
+
+    IS_PREHEATER {
+        {
+            key = "options#isPreheater";
+            data_type = DataTypeBoolean.class;
+            change_command = 0xd7;
+            change_data_size = 8;
+            change_data_pos = 1;
+            change_affected = new String[] { "temperatures#outdoorTemperatureIn", "temperatures#indoorTemperatureIn",
+                    "preheater#preheaterFrostProtect", "preheater#preheaterFrostTime", "preheater#preheaterHeating", "preheater_mode",
+                    "preheater#preheaterSafety", "times#preheaterTime", "preheater#preheaterValve" };
+            read_command = 0xd5;
+            read_reply_command = 0xd6;
+            read_reply_data_pos = new int[] { 0 };
+        }
+    },
+
+    IS_BYPASS {
+        {
+            key = "options#isBypass";
+            data_type = DataTypeBoolean.class;
+            change_command = 0xd7;
+            change_data_size = 8;
+            change_data_pos = 1;
+            change_affected = new String[] { "temperatures#indoorTemperatureIn", "temperatures#outdoorTemperatureOut" };
+            read_command = 0xd5;
+            read_reply_command = 0xd6;
+            read_reply_data_pos = new int[] { 1 };
+        }
+    },
+
+    RECU_TYPE {
+        {
+            key = "options#recuType";
+            data_type = DataTypeNumber.class;
+            possible_values = new int[] { 0x01, 0x02 };
+            change_command = 0xd7;
+            change_data_size = 8;
+            change_data_pos = 2;
+            change_affected = new String[] { "ventilation#fanInPercent", "ventilation#fanOutPercent", "temperatures#indoorTemperatureIn", "temperatures#outdoorTemperatureOut",
+                    "temperatures#indoorTemperatureOut", "temperatures#outdoorTemperatureIn" };
+            read_command = 0xd5;
+            read_reply_command = 0xd6;
+            read_reply_data_pos = new int[] { 2 };
+        }
+    },
+
+    RECU_SIZE {
+        {
+            key = "options#recuSize";
+            data_type = DataTypeNumber.class;
+            possible_values = new int[] { 0x01, 0x02 };
+            change_command = 0xd7;
+            change_data_size = 8;
+            change_data_pos = 3;
+            change_affected = new String[] { "ventilation#fanInPercent", "ventilation#fanOutPercent", "ventilation#fanOut0", "ventilation#fanOut1", "ventilation#fanOut2",
+                    "ventilation#fanOut3", "ventilation#fanIn0", "ventilation#fanIn1", "ventilation#fanIn2", "ventilation#fanIn3" };
+            read_command = 0xd5;
+            read_reply_command = 0xd6;
+            read_reply_data_pos = new int[] { 3 };
+        }
+    },
+
     IS_CHIMNEY {
         {
-            key = "is_chimney";
+            key = "options#isChimney";
             data_type = DataTypeBoolean.class;
             possible_values = new int[] { 0x01 };
             change_command = 0xd7;
             change_data_size = 8;
             change_data_pos = 4;
-            change_affected = new String[] { "out_fan_only", "in_fan_only" };
             read_command = 0xd5;
             read_reply_command = 0xd6;
             read_reply_data_pos = new int[] { 4 };
@@ -672,34 +713,16 @@ public enum ComfoAirCommandType {
         }
     },
 
-    IS_PREHEATER {
-        {
-            key = "is_preheater";
-            data_type = DataTypeBoolean.class;
-            possible_values = new int[] { 0x40 };
-            change_command = 0xd7;
-            change_data_size = 8;
-            change_data_pos = 4;
-            change_affected = new String[] { "outdoor_incomming_temperatur", "indoor_incomming_temperatur",
-                    "preheater_frost_protect", "preheater_frost_time", "preheater_heating", "preheater_mode",
-                    "preheater_option", "preheater_time", "preheater_valve" };
-            read_command = 0xd5;
-            read_reply_command = 0xd6;
-            read_reply_data_pos = new int[] { 4 };
-            read_reply_data_bits = 0x40;
-        }
-    },
-
     IS_COOKERHOOD {
         {
-            key = "is_cookerhood";
+            key = "options#isCookerhood";
             data_type = DataTypeBoolean.class;
             possible_values = new int[] { 0x02 };
             change_command = 0xd7;
             change_data_size = 8;
             change_data_pos = 4;
-            change_affected = new String[] { "cookerhood_delay", "cookerhood_mode", "cookerhood_speed",
-                    "cookerhood_temperatur" };
+            change_affected = new String[] { "menuP2#cookerhoodDelay", "cookerhood_mode", "cookerhood#cookerhoodSpeed",
+                    "temperatures#cookerhoodTemperature" };
             read_command = 0xd5;
             read_reply_command = 0xd6;
             read_reply_data_pos = new int[] { 4 };
@@ -707,30 +730,16 @@ public enum ComfoAirCommandType {
         }
     },
 
-    IS_BYPASS {
-        {
-            key = "is_bypass";
-            data_type = DataTypeNumber.class;
-            change_command = 0xd7;
-            change_data_size = 8;
-            change_data_pos = 1;
-            change_affected = new String[] { "indoor_incomming_temperatur", "outdoor_outgoing_temperatur" };
-            read_command = 0xd5;
-            read_reply_command = 0xd6;
-            read_reply_data_pos = new int[] { 1 };
-        }
-    },
-
     IS_HEATER {
         {
-            key = "is_heater";
+            key = "options#isHeater";
             data_type = DataTypeBoolean.class;
             possible_values = new int[] { 0x04 };
             change_command = 0xd7;
             change_data_size = 8;
             change_data_pos = 4;
-            change_affected = new String[] { "heater_target_temperatur", "heater_efficiency", "heater_mode",
-                    "heater_power", "heater_temperatur" };
+            change_affected = new String[] { "heater#heaterTargetTemperature", "heater#heaterPower", "heater_mode",
+                    "heater#heaterPowerI", "temperatures#heaterTemperature" };
             read_command = 0xd5;
             read_reply_command = 0xd6;
             read_reply_data_pos = new int[] { 4 };
@@ -738,41 +747,9 @@ public enum ComfoAirCommandType {
         }
     },
 
-    RECU_LEVEL {
-        {
-            key = "recu_level";
-            data_type = DataTypeNumber.class;
-            possible_values = new int[] { 0x00, 0x01, 0x02 };
-            change_command = 0xd7;
-            change_data_size = 8;
-            change_data_pos = 3;
-            change_affected = new String[] { "incomming_fan", "outgoing_fan", "fan_out_0", "fan_out_1", "fan_out_2",
-                    "fan_out_3", "fan_in_0", "fan_in_1", "fan_in_2", "fan_in_3" };
-            read_command = 0xd5;
-            read_reply_command = 0xd6;
-            read_reply_data_pos = new int[] { 3 };
-        }
-    },
-
-    RECU_TYPE {
-        {
-            key = "recu_type";
-            data_type = DataTypeNumber.class;
-            possible_values = new int[] { 0x01, 0x02 };
-            change_command = 0xd7;
-            change_data_size = 8;
-            change_data_pos = 2;
-            change_affected = new String[] { "incomming_fan", "outgoing_fan", "outdoor_incomming_temperatur",
-                    "indoor_incomming_temperatur", "indoor_outgoing_temperatur", "outdoor_outgoing_temperatur" };
-            read_command = 0xd5;
-            read_reply_command = 0xd6;
-            read_reply_data_pos = new int[] { 2 };
-        }
-    },
-
     IS_ENTHALPY {
         {
-            key = "is_enthalpy";
+            key = "options#isEnthalpy";
             data_type = DataTypeNumber.class;
             possible_values = new int[] { 0x00, 0x01, 0x02 };
             change_command = 0xd7;
@@ -788,14 +765,14 @@ public enum ComfoAirCommandType {
 
     IS_EWT {
         {
-            key = "is_ewt";
+            key = "options#isEWT";
             data_type = DataTypeNumber.class;
             possible_values = new int[] { 0x00, 0x01, 0x02 };
             change_command = 0xd7;
             change_data_size = 8;
             change_data_pos = 7;
-            change_affected = new String[] { "ewt_speed", "ewt_temperatur_low", "ewt_mode", "ewt_temperatur_high",
-                    "ewt_temperatur" };
+            change_affected = new String[] { "ewt#ewtSpeed", "ewt#ewtTemperatureLow", "ewt_mode", "ewt#ewtTemperatureHigh",
+                    "temperatures#ewtTemperature" };
             read_command = 0xd5;
             read_reply_command = 0xd6;
             read_reply_data_pos = new int[] { 10 };
@@ -804,21 +781,21 @@ public enum ComfoAirCommandType {
 
     EWT_SPEED {
         {
-            key = "ewt_speed";
+            key = "ewt#ewtSpeed";
             data_type = DataTypeNumber.class;
             change_command = 0xed;
             change_data_size = 5;
             change_data_pos = 2;
-            change_affected = new String[] { "ewt_mode", "ewt_temperatur" };
+            change_affected = new String[] { "ewt_mode", "temperatures#ewtTemperature" };
             read_command = 0xeb;
             read_reply_command = 0xec;
             read_reply_data_pos = new int[] { 2 };
         }
     },
 
-    EWT_TEMPERATUR_LOW {
+    EWT_TEMPERATURE_LOW {
         {
-            key = "ewt_temperatur_low";
+            key = "ewt#ewtTemperatureLow";
             data_type = DataTypeNumber.class;
             change_command = 0xed;
             change_data_size = 5;
@@ -830,9 +807,9 @@ public enum ComfoAirCommandType {
         }
     },
 
-    EWT_TEMPERATUR_HIGH {
+    EWT_TEMPERATURE_HIGH {
         {
-            key = "ewt_temperatur_high";
+            key = "ewt#ewtTemperatureHigh";
             data_type = DataTypeNumber.class;
             change_command = 0xed;
             change_data_size = 5;
@@ -846,21 +823,21 @@ public enum ComfoAirCommandType {
 
     COOKERHOOD_SPEED {
         {
-            key = "cookerhood_speed";
+            key = "cookerhood#cookerhoodSpeed";
             data_type = DataTypeNumber.class;
             change_command = 0xed;
             change_data_size = 5;
             change_data_pos = 3;
-            change_affected = new String[] { "cookerhood_mode", "cookerhood_temperatur" };
+            change_affected = new String[] { "cookerhood_mode", "temperatures#cookerhoodTemperature" };
             read_command = 0xeb;
             read_reply_command = 0xec;
             read_reply_data_pos = new int[] { 3 };
         }
     },
 
-    HEATER_EFFICIENCY {
+    HEATER_POWER {
         {
-            key = "heater_efficiency";
+            key = "heater#heaterPower";
             data_type = DataTypeNumber.class;
             read_command = 0xeb;
             read_reply_command = 0xec;
@@ -868,9 +845,9 @@ public enum ComfoAirCommandType {
         }
     },
 
-    HEATER_POWER {
+    HEATER_POWER_I {
         {
-            key = "heater_power";
+            key = "heater#heaterPowerI";
             data_type = DataTypeNumber.class;
             read_command = 0xeb;
             read_reply_command = 0xec;
@@ -880,12 +857,12 @@ public enum ComfoAirCommandType {
 
     HEATER_TARGET_TEMPERATUR {
         {
-            key = "heater_target_temperatur";
+            key = "heater#heaterTargetTemperature";
             data_type = DataTypeNumber.class;
             change_command = 0xed;
             change_data_size = 5;
             change_data_pos = 4;
-            change_affected = new String[] { "heater_mode", "heater_efficiency", "heater_temperatur" };
+            change_affected = new String[] { "heater_mode", "heater#heaterPower", "temperatures#heaterTemperature" };
             read_command = 0xeb;
             read_reply_command = 0xec;
             read_reply_data_pos = new int[] { 6 };
@@ -924,7 +901,7 @@ public enum ComfoAirCommandType {
 
     ERROR_MESSAGE {
         {
-            key = "error_message";
+            key = "ccease#errorMessage";
             data_type = DataTypeMessage.class;
             read_command = 0xd9;
             read_reply_command = 0xda;
@@ -1094,19 +1071,19 @@ public enum ComfoAirCommandType {
 
     ERROR_RESET {
         {
-            key = "error_reset";
+            key = "ccease#error_reset";
             data_type = DataTypeBoolean.class;
             possible_values = new int[] { 0x01 };
             change_command = 0xdb;
             change_data_size = 4;
             change_data_pos = 0;
-            change_affected = new String[] { "error_message" };
+            change_affected = new String[] { "ccease#errorMessage" };
         }
     },
 
-    FILTER_RUNNING {
+    FILTER_HOURS {
         {
-            key = "filter_running";
+            key = "status#filter_hours";
             data_type = DataTypeNumber.class;
             read_command = 0xdd;
             read_reply_command = 0xde;
@@ -1116,47 +1093,24 @@ public enum ComfoAirCommandType {
 
     FILTER_RESET {
         {
-            key = "filter_reset";
+            key = "ccease#filter_reset";
             data_type = DataTypeBoolean.class;
             possible_values = new int[] { 0x01 };
             change_command = 0xdb;
             change_data_size = 4;
             change_data_pos = 3;
-            change_affected = new String[] { "filter_running", "filter_error", "filter_error_intern",
-                    "filter_error_extern" };
+            change_affected = new String[] { "status#filter_hours", "ccease#filterError" };
         }
     },
 
     FILTER_ERROR {
         {
-            key = "filter_error";
+            key = "ccease#filter_error";
             data_type = DataTypeBoolean.class;
             read_command = 0xd9;
             read_reply_command = 0xda;
             read_reply_data_pos = new int[] { 8 };
             read_reply_data_bits = 0x01;
-        }
-    },
-
-    FILTER_ERROR_INTERN {
-        {
-            key = "filter_error_intern";
-            data_type = DataTypeBoolean.class;
-            read_command = 0x37;
-            read_reply_command = 0x3c;
-            read_reply_data_pos = new int[] { 1 };
-            read_reply_data_bits = 0x40;
-        }
-    },
-
-    FILTER_ERROR_EXTERN {
-        {
-            key = "filter_error_extern";
-            data_type = DataTypeBoolean.class;
-            read_command = 0x37;
-            read_reply_command = 0x3c;
-            read_reply_data_pos = new int[] { 1 };
-            read_reply_data_bits = 0x80;
         }
     },
 
@@ -1182,90 +1136,43 @@ public enum ComfoAirCommandType {
         }
     },
 
-    CHIMNEY_MODE {
+    BYPASS_FACTOR {
         {
-            key = "chimney_mode";
-            data_type = DataTypeBoolean.class;
-            read_command = 0xd5;
-            read_reply_command = 0xd6;
-            read_reply_data_pos = new int[] { 8 };
-            read_reply_data_bits = 0x01;
-        }
-    },
-
-    BYPASS_MODE {
-        {
-            key = "status#bypass_mode";
-            data_type = DataTypeBoolean.class;
-            read_command = 0xd5;
-            read_reply_command = 0xd6;
-            read_reply_data_pos = new int[] { 8 };
-            read_reply_data_bits = 0x02;
-        }
-    },
-
-    EWT_MODE {
-        {
-            key = "ewt_mode";
-            data_type = DataTypeBoolean.class;
-            read_command = 0xd5;
-            read_reply_command = 0xd6;
-            read_reply_data_pos = new int[] { 8 };
-            read_reply_data_bits = 0x04;
-        }
-    },
-
-    HEATER_MODE {
-        {
-            key = "heater_mode";
-            data_type = DataTypeBoolean.class;
-            read_command = 0xd5;
-            read_reply_command = 0xd6;
-            read_reply_data_pos = new int[] { 8 };
-            read_reply_data_bits = 0x08;
-        }
-    },
-
-    CONTROL_MODE {
-        {
-            key = "control_mode";
-            data_type = DataTypeBoolean.class;
-            read_command = 0xd5;
-            read_reply_command = 0xd6;
-            read_reply_data_pos = new int[] { 8 };
-            read_reply_data_bits = 0x10;
-        }
-    },
-
-    PREHEATER_MODE {
-        {
-            key = "preheater_mode";
-            data_type = DataTypeBoolean.class;
-            read_command = 0xd5;
-            read_reply_command = 0xd6;
-            read_reply_data_pos = new int[] { 8 };
-            read_reply_data_bits = 0x20;
-        }
-    },
-
-    COOKERHOOD_MODE {
-        {
-            key = "cookerhood_mode";
-            data_type = DataTypeBoolean.class;
-            read_command = 0xd5;
-            read_reply_command = 0xd6;
-            read_reply_data_pos = new int[] { 8 };
-            read_reply_data_bits = 0x40;
-        }
-    },
-
-    ENTHALPY_MODE {
-        {
-            key = "enthalpy_mode";
+            key = "bypass#bypassFactor";
             data_type = DataTypeNumber.class;
-            read_command = 0xd5;
-            read_reply_command = 0xd6;
-            read_reply_data_pos = new int[] { 9 };
+            read_command = 0xdf;
+            read_reply_command = 0xe0;
+            read_reply_data_pos = new int[] { 2 };
+        }
+    },
+
+    BYPASS_LEVEL {
+        {
+            key = "bypass#bypassLevel";
+            data_type = DataTypeNumber.class;
+            read_command = 0xdf;
+            read_reply_command = 0xe0;
+            read_reply_data_pos = new int[] { 3 };
+        }
+    },
+
+    BYPASS_CORRECTION {
+        {
+            key = "bypass#bypassCorrection";
+            data_type = DataTypeNumber.class;
+            read_command = 0xdf;
+            read_reply_command = 0xe0;
+            read_reply_data_pos = new int[] { 4 };
+        }
+    },
+
+    BYPASS_SUMMER {
+        {
+            key = "bypass#bypassSummer";
+            data_type = DataTypeBoolean.class;
+            read_command = 0xdf;
+            read_reply_command = 0xe0;
+            read_reply_data_pos = new int[] { 6 };
         }
     },
 
@@ -1311,7 +1218,7 @@ public enum ComfoAirCommandType {
 
     PREHEATER_VALVE {
         {
-            key = "preheater_valve";
+            key = "preheater#preheaterValve";
             data_type = DataTypeNumber.class;
             read_command = 0xe1;
             read_reply_command = 0xe2;
@@ -1321,7 +1228,7 @@ public enum ComfoAirCommandType {
 
     PREHEATER_FROST_PROTECT {
         {
-            key = "preheater_frost_protect";
+            key = "preheater#preheaterFrostProtect";
             data_type = DataTypeNumber.class;
             read_command = 0xe1;
             read_reply_command = 0xe2;
@@ -1331,7 +1238,7 @@ public enum ComfoAirCommandType {
 
     PREHEATER_HEATING {
         {
-            key = "preheater_heating";
+            key = "preheater#preheaterHeating";
             data_type = DataTypeNumber.class;
             read_command = 0xe1;
             read_reply_command = 0xe2;
@@ -1341,7 +1248,7 @@ public enum ComfoAirCommandType {
 
     PREHEATER_FROST_TIME {
         {
-            key = "preheater_frost_time";
+            key = "preheater#preheaterFrostTime";
             data_type = DataTypeNumber.class;
             read_command = 0xe1;
             read_reply_command = 0xe2;
@@ -1351,7 +1258,7 @@ public enum ComfoAirCommandType {
 
     PREHEATER_OPTION {
         {
-            key = "preheater_option";
+            key = "preheater#preheaterSafety";
             data_type = DataTypeNumber.class;
             read_command = 0xe1;
             read_reply_command = 0xe2;
@@ -1359,20 +1266,9 @@ public enum ComfoAirCommandType {
         }
     },
 
-    FREEZE_MODE {
-        {
-            key = "freeze_mode";
-            data_type = DataTypeBoolean.class;
-            read_command = 0x35;
-            read_reply_command = 0x3c;
-            read_reply_data_pos = new int[] { 5 };
-            read_reply_data_bits = 0x80;
-        }
-    },
-
     LEVEL0_TIME {
         {
-            key = "level0_time";
+            key = "times#level0Time";
             data_type = DataTypeNumber.class;
             read_command = 0xdd;
             read_reply_command = 0xde;
@@ -1382,7 +1278,7 @@ public enum ComfoAirCommandType {
 
     LEVEL1_TIME {
         {
-            key = "level1_time";
+            key = "times#level1Time";
             data_type = DataTypeNumber.class;
             read_command = 0xdd;
             read_reply_command = 0xde;
@@ -1392,7 +1288,7 @@ public enum ComfoAirCommandType {
 
     LEVEL2_TIME {
         {
-            key = "level2_time";
+            key = "times#level2Time";
             data_type = DataTypeNumber.class;
             read_command = 0xdd;
             read_reply_command = 0xde;
@@ -1402,7 +1298,7 @@ public enum ComfoAirCommandType {
 
     LEVEL3_TIME {
         {
-            key = "level3_time";
+            key = "times#level3Time";
             data_type = DataTypeNumber.class;
             read_command = 0xdd;
             read_reply_command = 0xde;
@@ -1412,7 +1308,7 @@ public enum ComfoAirCommandType {
 
     FREEZE_TIME {
         {
-            key = "freeze_time";
+            key = "times#freezeTime";
             data_type = DataTypeNumber.class;
             read_command = 0xdd;
             read_reply_command = 0xde;
@@ -1422,7 +1318,7 @@ public enum ComfoAirCommandType {
 
     PREHEATER_TIME {
         {
-            key = "preheater_time";
+            key = "times#preheaterTime";
             data_type = DataTypeNumber.class;
             read_command = 0xdd;
             read_reply_command = 0xde;
@@ -1432,21 +1328,11 @@ public enum ComfoAirCommandType {
 
     BYPASS_TIME {
         {
-            key = "bypass_time";
+            key = "times#bypassTime";
             data_type = DataTypeNumber.class;
             read_command = 0xdd;
             read_reply_command = 0xde;
             read_reply_data_pos = new int[] { 13, 14 };
-        }
-    },
-
-    BYPASS_SEASON {
-        {
-            key = "bypass_season";
-            data_type = DataTypeNumber.class;
-            read_command = 0xdf;
-            read_reply_command = 0xe0;
-            read_reply_data_pos = new int[] { 6 };
         }
     },
 
@@ -1458,8 +1344,8 @@ public enum ComfoAirCommandType {
             change_command = 0x9f;
             change_data_size = 19;
             change_data_pos = 0;
-            change_affected = new String[] { "analog1_mode", "analog1_negative", "analog1_min", "analog1_max",
-                    "analog1_value", "analog1_volt" };
+            change_affected = new String[] { "analog1_mode", "analog1_negative", "analog#analog1Min", "analog#analog1Max",
+                    "analog#analog1Value", "analog#analog1Volt" };
             read_command = 0x9d;
             read_reply_command = 0x9e;
             read_reply_data_pos = new int[] { 0 };
@@ -1475,8 +1361,8 @@ public enum ComfoAirCommandType {
             change_command = 0x9f;
             change_data_size = 19;
             change_data_pos = 0;
-            change_affected = new String[] { "analog2_mode", "analog2_negative", "analog2_min", "analog2_max",
-                    "analog2_value", "analog2_volt" };
+            change_affected = new String[] { "analog2_mode", "analog2_negative", "analog#analog2Min", "analog#analog2Max",
+                    "analog#analog2Value", "analog#analog2Volt" };
             read_command = 0x9d;
             read_reply_command = 0x9e;
             read_reply_data_pos = new int[] { 0 };
@@ -1492,8 +1378,8 @@ public enum ComfoAirCommandType {
             change_command = 0x9f;
             change_data_size = 19;
             change_data_pos = 0;
-            change_affected = new String[] { "analog3_mode", "analog3_negative", "analog3_min", "analog3_max",
-                    "analog3_value", "analog3_volt" };
+            change_affected = new String[] { "analog3_mode", "analog3_negative", "analog#analog3Min", "analog#analog3Max",
+                    "analog#analog3Value", "analog#analog3Volt" };
             read_command = 0x9d;
             read_reply_command = 0x9e;
             read_reply_data_pos = new int[] { 0 };
@@ -1509,8 +1395,8 @@ public enum ComfoAirCommandType {
             change_command = 0x9f;
             change_data_size = 19;
             change_data_pos = 0;
-            change_affected = new String[] { "analog4_mode", "analog4_negative", "analog4_min", "analog4_max",
-                    "analog4_value", "analog4_volt" };
+            change_affected = new String[] { "analog4_mode", "analog4_negative", "analog#analog4Min", "analog#analog4Max",
+                    "analog#analog4Value", "analog#analog4Volt" };
             read_command = 0x9d;
             read_reply_command = 0x9e;
             read_reply_data_pos = new int[] { 0 };
@@ -1542,8 +1428,8 @@ public enum ComfoAirCommandType {
             change_command = 0x9f;
             change_data_size = 19;
             change_data_pos = 1;
-            change_affected = new String[] { "analog1_negative", "analog1_min", "analog1_max", "analog1_value",
-                    "analog1_volt" };
+            change_affected = new String[] { "analog1_negative", "analog#analog1Min", "analog#analog1Max", "analog#analog1Value",
+                    "analog#analog1Volt" };
             read_command = 0x9d;
             read_reply_command = 0x9e;
             read_reply_data_pos = new int[] { 1 };
@@ -1559,8 +1445,8 @@ public enum ComfoAirCommandType {
             change_command = 0x9f;
             change_data_size = 19;
             change_data_pos = 1;
-            change_affected = new String[] { "analog2_negative", "analog2_min", "analog2_max", "analog2_value",
-                    "analog2_volt" };
+            change_affected = new String[] { "analog2_negative", "analog#analog2Min", "analog#analog2Max", "analog#analog2Value",
+                    "analog#analog2Volt" };
             read_command = 0x9d;
             read_reply_command = 0x9e;
             read_reply_data_pos = new int[] { 1 };
@@ -1576,8 +1462,8 @@ public enum ComfoAirCommandType {
             change_command = 0x9f;
             change_data_size = 19;
             change_data_pos = 1;
-            change_affected = new String[] { "analog3_negative", "analog3_min", "analog3_max", "analog3_value",
-                    "analog3_volt" };
+            change_affected = new String[] { "analog3_negative", "analog#analog3Min", "analog#analog3Max", "analog#analog3Value",
+                    "analog#analog3Volt" };
             read_command = 0x9d;
             read_reply_command = 0x9e;
             read_reply_data_pos = new int[] { 1 };
@@ -1593,8 +1479,8 @@ public enum ComfoAirCommandType {
             change_command = 0x9f;
             change_data_size = 19;
             change_data_pos = 1;
-            change_affected = new String[] { "analog4_negative", "analog4_min", "analog4_max", "analog4_value",
-                    "analog4_volt" };
+            change_affected = new String[] { "analog4_negative", "analog#analog4Min", "analog#analog4Max", "analog#analog4Value",
+                    "analog#analog4Volt" };
             read_command = 0x9d;
             read_reply_command = 0x9e;
             read_reply_data_pos = new int[] { 1 };
@@ -1700,7 +1586,7 @@ public enum ComfoAirCommandType {
 
     ANALOG1_MIN {
         {
-            key = "analog1_min";
+            key = "analog#analog1Min";
             data_type = DataTypeNumber.class;
             change_command = 0x9f;
             change_data_size = 19;
@@ -1714,7 +1600,7 @@ public enum ComfoAirCommandType {
 
     ANALOG1_MAX {
         {
-            key = "analog1_max";
+            key = "analog#analog1Max";
             data_type = DataTypeNumber.class;
             change_command = 0x9f;
             change_data_size = 19;
@@ -1728,7 +1614,7 @@ public enum ComfoAirCommandType {
 
     ANALOG1_VALUE {
         {
-            key = "analog1_value";
+            key = "analog#analog1Value";
             data_type = DataTypeNumber.class;
             change_command = 0x9f;
             change_data_size = 19;
@@ -1742,7 +1628,7 @@ public enum ComfoAirCommandType {
 
     ANALOG2_MIN {
         {
-            key = "analog2_min";
+            key = "analog#analog2Min";
             data_type = DataTypeNumber.class;
             change_command = 0x9f;
             change_data_size = 19;
@@ -1756,7 +1642,7 @@ public enum ComfoAirCommandType {
 
     ANALOG2_MAX {
         {
-            key = "analog2_max";
+            key = "analog#analog2Max";
             data_type = DataTypeNumber.class;
             change_command = 0x9f;
             change_data_size = 19;
@@ -1770,7 +1656,7 @@ public enum ComfoAirCommandType {
 
     ANALOG2_VALUE {
         {
-            key = "analog2_value";
+            key = "analog#analog2Value";
             data_type = DataTypeNumber.class;
             change_command = 0x9f;
             change_data_size = 19;
@@ -1784,7 +1670,7 @@ public enum ComfoAirCommandType {
 
     ANALOG3_MIN {
         {
-            key = "analog3_min";
+            key = "analog#analog3Min";
             data_type = DataTypeNumber.class;
             change_command = 0x9f;
             change_data_size = 19;
@@ -1798,7 +1684,7 @@ public enum ComfoAirCommandType {
 
     ANALOG3_MAX {
         {
-            key = "analog3_max";
+            key = "analog#analog3Max";
             data_type = DataTypeNumber.class;
             change_command = 0x9f;
             change_data_size = 19;
@@ -1812,7 +1698,7 @@ public enum ComfoAirCommandType {
 
     ANALOG3_VALUE {
         {
-            key = "analog3_value";
+            key = "analog#analog3Value";
             data_type = DataTypeNumber.class;
             change_command = 0x9f;
             change_data_size = 19;
@@ -1826,7 +1712,7 @@ public enum ComfoAirCommandType {
 
     ANALOG4_MIN {
         {
-            key = "analog4_min";
+            key = "analog#analog4Min";
             data_type = DataTypeNumber.class;
             change_command = 0x9f;
             change_data_size = 19;
@@ -1840,7 +1726,7 @@ public enum ComfoAirCommandType {
 
     ANALOG4_MAX {
         {
-            key = "analog4_max";
+            key = "analog#analog4Max";
             data_type = DataTypeNumber.class;
             change_command = 0x9f;
             change_data_size = 19;
@@ -1854,7 +1740,7 @@ public enum ComfoAirCommandType {
 
     ANALOG4_VALUE {
         {
-            key = "analog4_value";
+            key = "analog#analog4Value";
             data_type = DataTypeNumber.class;
             change_command = 0x9f;
             change_data_size = 19;
@@ -1910,7 +1796,7 @@ public enum ComfoAirCommandType {
 
     ANALOG_MODE {
         {
-            key = "analog_mode";
+            key = "analog#analogMode";
             data_type = DataTypeNumber.class;
             possible_values = new int[] { 0x00, 0x01 };
             change_command = 0x9f;
@@ -1925,7 +1811,7 @@ public enum ComfoAirCommandType {
 
     ANALOG1_VOLT {
         {
-            key = "analog1_volt";
+            key = "analog#analog1Volt";
             data_type = DataTypeVolt.class;
             read_command = 0x13;
             read_reply_command = 0x14;
@@ -1935,7 +1821,7 @@ public enum ComfoAirCommandType {
 
     ANALOG2_VOLT {
         {
-            key = "analog2_volt";
+            key = "analog#analog2Volt";
             data_type = DataTypeVolt.class;
             read_command = 0x13;
             read_reply_command = 0x14;
@@ -1945,7 +1831,7 @@ public enum ComfoAirCommandType {
 
     ANALOG3_VOLT {
         {
-            key = "analog3_volt";
+            key = "analog#analog3Volt";
             data_type = DataTypeVolt.class;
             read_command = 0x13;
             read_reply_command = 0x14;
@@ -1955,7 +1841,7 @@ public enum ComfoAirCommandType {
 
     ANALOG4_VOLT {
         {
-            key = "analog4_volt";
+            key = "analog#analog4Volt";
             data_type = DataTypeVolt.class;
             read_command = 0x13;
             read_reply_command = 0x14;
@@ -1963,31 +1849,9 @@ public enum ComfoAirCommandType {
         }
     },
 
-    IS_FAN_IN {
-        {
-            key = "is_fan_in";
-            data_type = DataTypeBoolean.class;
-            read_command = 0x37;
-            read_reply_command = 0x3c;
-            read_reply_data_pos = new int[] { 9 };
-            read_reply_data_bits = 0x40;
-        }
-    },
-
-    IS_FAN_OUT {
-        {
-            key = "is_fan_out";
-            data_type = DataTypeBoolean.class;
-            read_command = 0x37;
-            read_reply_command = 0x3c;
-            read_reply_data_pos = new int[] { 9 };
-            read_reply_data_bits = 0x80;
-        }
-    },
-
     IS_L1_SWITCH {
         {
-            key = "is_L1_switch";
+            key = "inputs#isL1Switch";
             data_type = DataTypeBoolean.class;
             read_command = 0x03;
             read_reply_command = 0x04;
@@ -1998,7 +1862,7 @@ public enum ComfoAirCommandType {
 
     IS_L2_SWITCH {
         {
-            key = "is_L2_switch";
+            key = "inputs#isL2Switch";
             data_type = DataTypeBoolean.class;
             read_command = 0x03;
             read_reply_command = 0x04;
@@ -2009,7 +1873,7 @@ public enum ComfoAirCommandType {
 
     IS_BATHROOM_SWITCH {
         {
-            key = "is_bathroom_switch";
+            key = "inputs#isBathroomSwitch";
             data_type = DataTypeBoolean.class;
             read_command = 0x03;
             read_reply_command = 0x04;
@@ -2020,7 +1884,7 @@ public enum ComfoAirCommandType {
 
     IS_COOKERHOOD_SWITCH {
         {
-            key = "is_cookerhood_switch";
+            key = "inputs#isCookerhoodSwitch";
             data_type = DataTypeBoolean.class;
             read_command = 0x03;
             read_reply_command = 0x04;
@@ -2031,7 +1895,7 @@ public enum ComfoAirCommandType {
 
     IS_EXTERNAL_FILTER {
         {
-            key = "is_external_filter";
+            key = "inputs#isExternalFilter";
             data_type = DataTypeBoolean.class;
             read_command = 0x03;
             read_reply_command = 0x04;
@@ -2042,7 +1906,7 @@ public enum ComfoAirCommandType {
 
     IS_WTW {
         {
-            key = "is_WTW";
+            key = "inputs#isWTW";
             data_type = DataTypeBoolean.class;
             read_command = 0x03;
             read_reply_command = 0x04;
@@ -2053,7 +1917,7 @@ public enum ComfoAirCommandType {
 
     IS_BATHROOM2_SWITCH {
         {
-            key = "is_bathroom2_switch";
+            key = "inputs#isBathroom2Switch";
             data_type = DataTypeBoolean.class;
             read_command = 0x03;
             read_reply_command = 0x04;
@@ -2197,12 +2061,13 @@ public enum ComfoAirCommandType {
      */
     public static ComfoAirCommand getChangeCommand(String key, State value) {
         ComfoAirCommandType commandType = ComfoAirCommandType.getCommandTypeByKey(key);
+        DecimalType decimalValue = value.as(DecimalType.class);
 
-        if (commandType != null) {
+        if (commandType != null && decimalValue != null) {
             ComfoAirDataType dataType = commandType.getDataType();
             int[] data = dataType.convertFromState(value, commandType);
             int dataPossition = commandType.getChangeDataPos();
-            int intValue = (value.as(DecimalType.class)).intValue();
+            int intValue = decimalValue.intValue();
 
             return new ComfoAirCommand(key, commandType.change_command, null, data, dataPossition, intValue);
         }

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2019 Contributors to the openHAB project
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
  * Class to handle boolean values which are handled as decimal 0/1 states
  *
  * @author Holger Hees
- * @since 1.3.0
+ * @author Hans Böhm
  */
 public class DataTypeBoolean implements ComfoAirDataType {
 
@@ -62,14 +62,21 @@ public class DataTypeBoolean implements ComfoAirDataType {
             logger.trace("\"DataTypeBoolean\" class \"convertFromState\" method parameter: null");
             return null;
         } else {
+            DecimalType decimalValue = value.as(DecimalType.class);
 
-            int[] template = commandType.getChangeDataTemplate();
+            if (decimalValue != null) {
+                int[] template = commandType.getChangeDataTemplate();
 
-            template[commandType.getChangeDataPos()] = (value.as(DecimalType.class)).intValue() == 1
-                    ? commandType.getPossibleValues()[0]
-                    : 0x00;
+                template[commandType.getChangeDataPos()] = decimalValue.intValue() == 1
+                        ? commandType.getPossibleValues()[0]
+                        : 0x00;
 
-            return template;
+                return template;
+            } else {
+                logger.trace(
+                        "\"DataTypeBoolean\" class \"convertFromState\" method: State value conversion returned null");
+                return null;
+            }
         }
     }
 

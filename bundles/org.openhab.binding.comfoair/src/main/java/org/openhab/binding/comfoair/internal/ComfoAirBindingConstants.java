@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2019 Contributors to the openHAB project
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -26,10 +26,8 @@ public class ComfoAirBindingConstants {
 
     private static final String BINDING_ID = "comfoair";
 
-    // List of all Thing Type UIDs
     public static final ThingTypeUID THING_TYPE_COMFOAIR_GENERIC = new ThingTypeUID(BINDING_ID, "comfoair");
 
-    // List of all Channel ids
     public static final String CHANNEL_GROUP_SENSOR_VALUES = "sensorValues#";
     public static final String CHANNEL_GROUP_CONTROLS = "controls#";
     public static final String CHANNEL_GROUP_STATUS = "status#";
