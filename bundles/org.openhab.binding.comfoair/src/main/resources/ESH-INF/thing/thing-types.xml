@@ -190,6 +190,20 @@
 				</channels>
 		</channel-group-type>
 
+		<channel-group-type id="menuP9">
+				<label>Menu P9: Option States</label>
+				<channels>
+						<channel id="chimneyState" typeId="chimney_state" />
+						<channel id="bypassState" typeId="bypass_state" />
+						<channel id="ewtState" typeId="ewt_state" />
+						<channel id="heaterState" typeId="heater_state" />
+						<channel id="vControlState" typeId="v_control_state" />
+						<channel id="frostState" typeId="frost_state" />
+						<channel id="cookerhoodState" typeId="cookerhood_state" />
+						<channel id="enthalpyState" typeId="enthalpy_state" />
+				</channels>
+		</channel-group-type>
+
 		<channel-group-type id="inputs">
 				<label>Inputs</label>
 				<channels>
@@ -473,6 +487,70 @@
 				<label>Cookerhood sensor available</label>
 				<description>Availability of cookerhood temperature sensor</description>
 				<category>Temperature</category>
+				<state readOnly="true"/>
+		</channel-type>
+
+		<channel-type id="chimney_state" advanced="true">
+				<item-type>Switch</item-type>
+				<label>Chimney Control State</label>
+				<description>State of the chimney control</description>
+				<category>Switch</category>
+				<state readOnly="true"/>
+		</channel-type>
+
+		<channel-type id="bypass_state" advanced="true">
+				<item-type>Switch</item-type>
+				<label>Bypass State</label>
+				<description>State of the bypass (ON = open / OFF = closed)</description>
+				<category>Switch</category>
+				<state readOnly="true"/>
+		</channel-type>
+
+		<channel-type id="ewt_state" advanced="true">
+				<item-type>Switch</item-type>
+				<label>EWT State</label>
+				<description>State of the EWT valve (ON = open / OFF = closed)</description>
+				<category>Switch</category>
+				<state readOnly="true"/>
+		</channel-type>
+
+		<channel-type id="heater_state" advanced="true">
+				<item-type>Switch</item-type>
+				<label>Heater State</label>
+				<description>State of the heater</description>
+				<category>Switch</category>
+				<state readOnly="true"/>
+		</channel-type>
+
+		<channel-type id="v_control_state" advanced="true">
+				<item-type>Switch</item-type>
+				<label>0-10V Control State</label>
+				<description>State of the 0-10V control</description>
+				<category>Switch</category>
+				<state readOnly="true"/>
+		</channel-type>
+
+		<channel-type id="frost_state" advanced="true">
+				<item-type>Switch</item-type>
+				<label>Antifrost State</label>
+				<description>State of the antifrost control</description>
+				<category>Switch</category>
+				<state readOnly="true"/>
+		</channel-type>
+
+		<channel-type id="cookerhood_state" advanced="true">
+				<item-type>Switch</item-type>
+				<label>Cookerhood State</label>
+				<description>State of the cookerhood control</description>
+				<category>Switch</category>
+				<state readOnly="true"/>
+		</channel-type>
+
+		<channel-type id="enthalpy_state" advanced="true">
+				<item-type>Switch</item-type>
+				<label>Enthalpy State</label>
+				<description>State of the enthalpy module</description>
+				<category>Switch</category>
 				<state readOnly="true"/>
 		</channel-type>
 
