@@ -154,11 +154,11 @@ public class ComfoAirHandler extends BaseThingHandler {
     private State sendCommand(ComfoAirCommand command, String commandKey) {
         Integer requestCmd = command.getRequestCmd();
         Integer replyCmd = command.getReplyCmd();
-        int[] requestData = command.getRequestData();
+        Integer[] requestData = command.getRequestData();
 
         Integer preRequestCmd;
         Integer preReplyCmd;
-        int[] preResponse = null;
+        Integer[] preResponse = null;
 
         switch (requestCmd) {
             case 0x9f:
@@ -202,7 +202,7 @@ public class ComfoAirHandler extends BaseThingHandler {
             }
         }
 
-        int[] response = comfoAirConnector.sendCommand(command, preResponse);
+        Integer[] response = comfoAirConnector.sendCommand(command, preResponse);
 
         if (response != null) {
             ComfoAirCommandType comfoAirCommandType = ComfoAirCommandType.getCommandTypeByKey(commandKey);

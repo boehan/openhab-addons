@@ -32,7 +32,7 @@ public class DataTypeMessage implements ComfoAirDataType {
      * {@inheritDoc}
      */
     @Override
-    public State convertToState(int[] data, ComfoAirCommandType commandType) {
+    public State convertToState(Integer[] data, ComfoAirCommandType commandType) {
 
         if (data == null || commandType == null) {
             logger.trace("\"DataTypeMessage\" class \"convertToState\" method parameter: null");
@@ -79,7 +79,7 @@ public class DataTypeMessage implements ComfoAirDataType {
      * {@inheritDoc}
      */
     @Override
-    public int[] convertFromState(State value, ComfoAirCommandType commandType) {
+    public Integer[] convertFromState(State value, ComfoAirCommandType commandType) {
         return null;
     }
 

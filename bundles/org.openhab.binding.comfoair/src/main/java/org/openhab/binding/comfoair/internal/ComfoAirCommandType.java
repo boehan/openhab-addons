@@ -570,7 +570,7 @@ public enum ComfoAirCommandType {
             change_command = 0xd3;
             change_data_size = 1;
             change_data_pos = 0;
-            change_affected = new String[] { "bypass#bypassFactor", "bypass#bypassLevel",  "bypass#bypassSummer"};
+            change_affected = new String[] { "bypass#bypassFactor", "bypass#bypassLevel", "bypass#bypassSummer" };
             read_command = 0xd1;
             read_reply_command = 0xd2;
             read_reply_data_pos = new int[] { 0 };
@@ -732,8 +732,9 @@ public enum ComfoAirCommandType {
             change_data_size = 8;
             change_data_pos = 1;
             change_affected = new String[] { "temperatures#outdoorTemperatureIn", "temperatures#indoorTemperatureIn",
-                    "preheater#preheaterFrostProtect", "preheater#preheaterFrostTime", "preheater#preheaterHeating", "menuP9#frostState",
-                    "preheater#preheaterSafety", "times#preheaterTime", "preheater#preheaterValve" };
+                    "preheater#preheaterFrostProtect", "preheater#preheaterFrostTime", "preheater#preheaterHeating",
+                    "menuP9#frostState", "preheater#preheaterSafety", "times#preheaterTime",
+                    "preheater#preheaterValve" };
             read_command = 0xd5;
             read_reply_command = 0xd6;
             read_reply_data_pos = new int[] { 0 };
@@ -762,7 +763,8 @@ public enum ComfoAirCommandType {
             change_command = 0xd7;
             change_data_size = 8;
             change_data_pos = 2;
-            change_affected = new String[] { "ventilation#fanInPercent", "ventilation#fanOutPercent", "temperatures#indoorTemperatureIn", "temperatures#outdoorTemperatureOut",
+            change_affected = new String[] { "ventilation#fanInPercent", "ventilation#fanOutPercent",
+                    "temperatures#indoorTemperatureIn", "temperatures#outdoorTemperatureOut",
                     "temperatures#indoorTemperatureOut", "temperatures#outdoorTemperatureIn" };
             read_command = 0xd5;
             read_reply_command = 0xd6;
@@ -778,8 +780,9 @@ public enum ComfoAirCommandType {
             change_command = 0xd7;
             change_data_size = 8;
             change_data_pos = 3;
-            change_affected = new String[] { "ventilation#fanInPercent", "ventilation#fanOutPercent", "ventilation#fanOut0", "ventilation#fanOut1", "ventilation#fanOut2",
-                    "ventilation#fanOut3", "ventilation#fanIn0", "ventilation#fanIn1", "ventilation#fanIn2", "ventilation#fanIn3" };
+            change_affected = new String[] { "ventilation#fanInPercent", "ventilation#fanOutPercent",
+                    "ventilation#fanOut0", "ventilation#fanOut1", "ventilation#fanOut2", "ventilation#fanOut3",
+                    "ventilation#fanIn0", "ventilation#fanIn1", "ventilation#fanIn2", "ventilation#fanIn3" };
             read_command = 0xd5;
             read_reply_command = 0xd6;
             read_reply_data_pos = new int[] { 3 };
@@ -809,8 +812,8 @@ public enum ComfoAirCommandType {
             change_command = 0xd7;
             change_data_size = 8;
             change_data_pos = 4;
-            change_affected = new String[] { "menuP2#cookerhoodDelay", "menuP9#cookerhoodState", "cookerhood#cookerhoodSpeed",
-                    "temperatures#cookerhoodTemperature" };
+            change_affected = new String[] { "menuP2#cookerhoodDelay", "menuP9#cookerhoodState",
+                    "cookerhood#cookerhoodSpeed", "temperatures#cookerhoodTemperature" };
             read_command = 0xd5;
             read_reply_command = 0xd6;
             read_reply_data_pos = new int[] { 4 };
@@ -826,8 +829,8 @@ public enum ComfoAirCommandType {
             change_command = 0xd7;
             change_data_size = 8;
             change_data_pos = 4;
-            change_affected = new String[] { "heater#heaterTargetTemperature", "heater#heaterPower", "menuP9#heaterState",
-                    "heater#heaterPowerI", "temperatures#heaterTemperature" };
+            change_affected = new String[] { "heater#heaterTargetTemperature", "heater#heaterPower",
+                    "menuP9#heaterState", "heater#heaterPowerI", "temperatures#heaterTemperature" };
             read_command = 0xd5;
             read_reply_command = 0xd6;
             read_reply_data_pos = new int[] { 4 };
@@ -859,8 +862,8 @@ public enum ComfoAirCommandType {
             change_command = 0xd7;
             change_data_size = 8;
             change_data_pos = 7;
-            change_affected = new String[] { "ewt#ewtSpeed", "ewt#ewtTemperatureLow", "menuP9#ewtState", "ewt#ewtTemperatureHigh",
-                    "temperatures#ewtTemperature" };
+            change_affected = new String[] { "ewt#ewtSpeed", "ewt#ewtTemperatureLow", "menuP9#ewtState",
+                    "ewt#ewtTemperatureHigh", "temperatures#ewtTemperature" };
             read_command = 0xd5;
             read_reply_command = 0xd6;
             read_reply_data_pos = new int[] { 10 };
@@ -950,7 +953,8 @@ public enum ComfoAirCommandType {
             change_command = 0xed;
             change_data_size = 5;
             change_data_pos = 4;
-            change_affected = new String[] { "menuP9#heaterState", "heater#heaterPower", "temperatures#heaterTemperature" };
+            change_affected = new String[] { "menuP9#heaterState", "heater#heaterPower",
+                    "temperatures#heaterTemperature" };
             read_command = 0xeb;
             read_reply_command = 0xec;
             read_reply_data_pos = new int[] { 6 };
@@ -1410,8 +1414,8 @@ public enum ComfoAirCommandType {
             change_command = 0x9f;
             change_data_size = 19;
             change_data_pos = 0;
-            change_affected = new String[] { "analog1_mode", "analog1_negative", "analog#analog1Min", "analog#analog1Max",
-                    "analog#analog1Value", "analog#analog1Volt" };
+            change_affected = new String[] { "analog1_mode", "analog1_negative", "analog#analog1Min",
+                    "analog#analog1Max", "analog#analog1Value", "analog#analog1Volt" };
             read_command = 0x9d;
             read_reply_command = 0x9e;
             read_reply_data_pos = new int[] { 0 };
@@ -1427,8 +1431,8 @@ public enum ComfoAirCommandType {
             change_command = 0x9f;
             change_data_size = 19;
             change_data_pos = 0;
-            change_affected = new String[] { "analog2_mode", "analog2_negative", "analog#analog2Min", "analog#analog2Max",
-                    "analog#analog2Value", "analog#analog2Volt" };
+            change_affected = new String[] { "analog2_mode", "analog2_negative", "analog#analog2Min",
+                    "analog#analog2Max", "analog#analog2Value", "analog#analog2Volt" };
             read_command = 0x9d;
             read_reply_command = 0x9e;
             read_reply_data_pos = new int[] { 0 };
@@ -1444,8 +1448,8 @@ public enum ComfoAirCommandType {
             change_command = 0x9f;
             change_data_size = 19;
             change_data_pos = 0;
-            change_affected = new String[] { "analog3_mode", "analog3_negative", "analog#analog3Min", "analog#analog3Max",
-                    "analog#analog3Value", "analog#analog3Volt" };
+            change_affected = new String[] { "analog3_mode", "analog3_negative", "analog#analog3Min",
+                    "analog#analog3Max", "analog#analog3Value", "analog#analog3Volt" };
             read_command = 0x9d;
             read_reply_command = 0x9e;
             read_reply_data_pos = new int[] { 0 };
@@ -1461,8 +1465,8 @@ public enum ComfoAirCommandType {
             change_command = 0x9f;
             change_data_size = 19;
             change_data_pos = 0;
-            change_affected = new String[] { "analog4_mode", "analog4_negative", "analog#analog4Min", "analog#analog4Max",
-                    "analog#analog4Value", "analog#analog4Volt" };
+            change_affected = new String[] { "analog4_mode", "analog4_negative", "analog#analog4Min",
+                    "analog#analog4Max", "analog#analog4Value", "analog#analog4Volt" };
             read_command = 0x9d;
             read_reply_command = 0x9e;
             read_reply_data_pos = new int[] { 0 };
@@ -1494,8 +1498,8 @@ public enum ComfoAirCommandType {
             change_command = 0x9f;
             change_data_size = 19;
             change_data_pos = 1;
-            change_affected = new String[] { "analog1_negative", "analog#analog1Min", "analog#analog1Max", "analog#analog1Value",
-                    "analog#analog1Volt" };
+            change_affected = new String[] { "analog1_negative", "analog#analog1Min", "analog#analog1Max",
+                    "analog#analog1Value", "analog#analog1Volt" };
             read_command = 0x9d;
             read_reply_command = 0x9e;
             read_reply_data_pos = new int[] { 1 };
@@ -1511,8 +1515,8 @@ public enum ComfoAirCommandType {
             change_command = 0x9f;
             change_data_size = 19;
             change_data_pos = 1;
-            change_affected = new String[] { "analog2_negative", "analog#analog2Min", "analog#analog2Max", "analog#analog2Value",
-                    "analog#analog2Volt" };
+            change_affected = new String[] { "analog2_negative", "analog#analog2Min", "analog#analog2Max",
+                    "analog#analog2Value", "analog#analog2Volt" };
             read_command = 0x9d;
             read_reply_command = 0x9e;
             read_reply_data_pos = new int[] { 1 };
@@ -1528,8 +1532,8 @@ public enum ComfoAirCommandType {
             change_command = 0x9f;
             change_data_size = 19;
             change_data_pos = 1;
-            change_affected = new String[] { "analog3_negative", "analog#analog3Min", "analog#analog3Max", "analog#analog3Value",
-                    "analog#analog3Volt" };
+            change_affected = new String[] { "analog3_negative", "analog#analog3Min", "analog#analog3Max",
+                    "analog#analog3Value", "analog#analog3Volt" };
             read_command = 0x9d;
             read_reply_command = 0x9e;
             read_reply_data_pos = new int[] { 1 };
@@ -1545,8 +1549,8 @@ public enum ComfoAirCommandType {
             change_command = 0x9f;
             change_data_size = 19;
             change_data_pos = 1;
-            change_affected = new String[] { "analog4_negative", "analog#analog4Min", "analog#analog4Max", "analog#analog4Value",
-                    "analog#analog4Volt" };
+            change_affected = new String[] { "analog4_negative", "analog#analog4Min", "analog#analog4Max",
+                    "analog#analog4Value", "analog#analog4Volt" };
             read_command = 0x9d;
             read_reply_command = 0x9e;
             read_reply_data_pos = new int[] { 1 };
@@ -2075,8 +2079,8 @@ public enum ComfoAirCommandType {
     /**
      * @return generate a byte value sequence for the response stream
      */
-    public int[] getChangeDataTemplate() {
-        int[] template = new int[change_data_size];
+    public Integer[] getChangeDataTemplate() {
+        Integer[] template = new Integer[change_data_size];
         for (int i = 0; i < template.length; i++) {
             template[i] = 0x00;
         }
@@ -2131,7 +2135,7 @@ public enum ComfoAirCommandType {
 
         if (commandType != null && decimalValue != null) {
             ComfoAirDataType dataType = commandType.getDataType();
-            int[] data = dataType.convertFromState(value, commandType);
+            Integer[] data = dataType.convertFromState(value, commandType);
             int dataPossition = commandType.getChangeDataPos();
             int intValue = decimalValue.intValue();
 

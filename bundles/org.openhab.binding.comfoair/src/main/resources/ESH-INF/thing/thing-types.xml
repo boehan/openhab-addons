@@ -97,6 +97,7 @@
 						<channel id="preheaterTime" typeId="preheater_time" />
 						<channel id="bypassTime" typeId="bypass_time" />
 						<channel id="filterHours" typeId="filter_hours" />
+				</channels>
 		</channel-group-type>
 
 		<channel-group-type id="bypass">

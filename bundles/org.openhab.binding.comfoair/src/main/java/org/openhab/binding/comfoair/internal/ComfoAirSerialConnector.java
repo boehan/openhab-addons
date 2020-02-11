@@ -20,6 +20,8 @@ import java.io.OutputStream;
 import java.util.TooManyListenersException;
 
 import org.apache.commons.io.IOUtils;
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.io.transport.serial.PortInUseException;
 import org.eclipse.smarthome.io.transport.serial.SerialPort;
@@ -37,6 +39,7 @@ import org.slf4j.LoggerFactory;
  * @author Hans Böhm - Initial contribution
  *
  */
+@NonNullByDefault
 public class ComfoAirSerialConnector implements SerialPortEventListener {
 
     private final Logger logger = LoggerFactory.getLogger(ComfoAirSerialConnector.class);
@@ -50,17 +53,16 @@ public class ComfoAirSerialConnector implements SerialPortEventListener {
     private boolean connected = false;
     private final String serialPortName;
     private final int baudRate;
-    private SerialPort serialPort;
     private final SerialPortManager serialPortManager;
-    private InputStream inputStream;
-    private OutputStream outputStream;
+    private @Nullable SerialPort serialPort;
+    private @Nullable InputStream inputStream;
+    private @Nullable OutputStream outputStream;
 
     public ComfoAirSerialConnector(final SerialPortManager serialPortManager, final String serialPortName,
             final int baudRate) {
         this.serialPortManager = serialPortManager;
         this.serialPortName = serialPortName;
         this.baudRate = baudRate;
-        this.serialPort = null;
     }
 
     /**
@@ -72,13 +74,14 @@ public class ComfoAirSerialConnector implements SerialPortEventListener {
         try {
             SerialPortIdentifier portIdentifier = serialPortManager.getIdentifier(serialPortName);
             if (portIdentifier != null) {
-                serialPort = portIdentifier.open(this.getClass().getName(), 3000);
+                SerialPort serialPort = portIdentifier.open(this.getClass().getName(), 3000);
                 serialPort.setSerialPortParams(baudRate, SerialPort.DATABITS_8, SerialPort.STOPBITS_1,
                         SerialPort.PARITY_NONE);
                 serialPort.enableReceiveThreshold(1);
                 serialPort.enableReceiveTimeout(1000);
                 serialPort.addEventListener(this);
                 serialPort.notifyOnDataAvailable(true);
+                this.serialPort = serialPort;
 
                 inputStream = new DataInputStream(new BufferedInputStream(serialPort.getInputStream()));
                 outputStream = serialPort.getOutputStream();
@@ -115,18 +118,22 @@ public class ComfoAirSerialConnector implements SerialPortEventListener {
      */
     public void close() {
         logger.debug("close(): Close ComfoAir connection");
+        SerialPort serialPort = this.serialPort;
 
-        ComfoAirCommand command = ComfoAirCommandType.getChangeCommand(ComfoAirCommandType.ACTIVATE.key, OnOffType.OFF);
+        if (serialPort != null) {
+            ComfoAirCommand command = ComfoAirCommandType.getChangeCommand(ComfoAirCommandType.ACTIVATE.key,
+                    OnOffType.OFF);
 
-        if (command != null) {
-            sendCommand(command, null);
-        } else {
-            logger.debug("Failure while creating COMMAND: {}", command);
+            if (command != null) {
+                sendCommand(command, null);
+            } else {
+                logger.debug("Failure while creating COMMAND: {}", command);
+            }
+
+            IOUtils.closeQuietly(inputStream);
+            IOUtils.closeQuietly(outputStream);
+            serialPort.close();
         }
-
-        IOUtils.closeQuietly(inputStream);
-        IOUtils.closeQuietly(outputStream);
-        serialPort.close();
     }
 
     /**
@@ -136,7 +143,7 @@ public class ComfoAirSerialConnector implements SerialPortEventListener {
      * @param preRequestData
      * @return reply byte values
      */
-    public synchronized int[] sendCommand(ComfoAirCommand command, int[] preRequestData) {
+    public synchronized Integer @Nullable [] sendCommand(ComfoAirCommand command, Integer @Nullable [] preRequestData) {
         int requestCmd = command.getRequestCmd();
         int retry = 0;
 
@@ -144,7 +151,7 @@ public class ComfoAirSerialConnector implements SerialPortEventListener {
         if (requestCmd == 0x9b) {
             isSuspended = !isSuspended;
         } else if (requestCmd == 0x9c) {
-            return new int[] { isSuspended ? 0x00 : 0x03 };
+            return new Integer[] { isSuspended ? 0x00 : 0x03 };
         } else if (isSuspended) {
             logger.trace("Ignore cmd. Service is currently suspended");
             return null;
@@ -152,7 +159,7 @@ public class ComfoAirSerialConnector implements SerialPortEventListener {
 
         do {
             // If preRequestData param was send (preRequestData is sending for write command)
-            int[] requestData;
+            Integer[] requestData;
 
             if (preRequestData == null) {
                 requestData = command.getRequestData();
@@ -168,7 +175,7 @@ public class ComfoAirSerialConnector implements SerialPortEventListener {
 
             // Fake read request for ccease properties
             if (requestData == null && requestCmd == 0x37) {
-                requestData = new int[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                requestData = new Integer[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
             }
 
             byte[] requestBlock = calculateRequest(requestCmd, requestData);
@@ -186,7 +193,7 @@ public class ComfoAirSerialConnector implements SerialPortEventListener {
                 byte[] readBuffer = new byte[31];
 
                 do {
-                    while (inputStream.available() > 0) {
+                    while (inputStream != null && inputStream.available() > 0) {
 
                         int bytes = inputStream.read(readBuffer);
 
@@ -205,7 +212,7 @@ public class ComfoAirSerialConnector implements SerialPortEventListener {
                         // ignore interruption
                     }
 
-                } while (inputStream.available() > 0);
+                } while (inputStream != null && inputStream.available() > 0);
 
                 // check for ACK
                 if (responseBlock.length >= 2 && responseBlock[0] == (byte) 0x07 && responseBlock[1] == (byte) 0xf3) {
@@ -236,7 +243,7 @@ public class ComfoAirSerialConnector implements SerialPortEventListener {
                         if (dataSize + 3 == cleanedBlock.length - 1) {
 
                             byte checksum = cleanedBlock[dataSize + 3];
-                            int[] replyData = new int[dataSize];
+                            Integer[] replyData = new Integer[dataSize];
                             for (int i = 0; i < dataSize; i++) {
                                 replyData[i] = cleanedBlock[i + 3] & 0xff;
                             }
@@ -294,22 +301,22 @@ public class ComfoAirSerialConnector implements SerialPortEventListener {
      * sequence and checksum).
      *
      * @param command
-     * @param data
+     * @param requestData
      * @return response byte value block with cmd, data and checksum
      */
-    private byte[] calculateRequest(int command, int[] data) {
+    private byte[] calculateRequest(int command, Integer @Nullable [] requestData) {
 
         // generate the command block (cmd and request data)
-        int length = data == null ? 0 : data.length;
+        int length = requestData == null ? 0 : requestData.length;
 
         byte[] block = new byte[4 + length];
 
         block[0] = 0x00;
         block[1] = (byte) command;
         block[2] = (byte) length;
-        if (data != null) {
-            for (int i = 0; i < data.length; i++) {
-                block[i + 3] = (byte) data[i];
+        if (requestData != null) {
+            for (int i = 0; i < requestData.length; i++) {
+                block[i + 3] = requestData[i].byteValue();
             }
         }
 
@@ -418,8 +425,9 @@ public class ComfoAirSerialConnector implements SerialPortEventListener {
         logger.trace("send DATA: {}", dumpData(request));
 
         try {
-            outputStream.write(request);
-
+            if (outputStream != null) {
+                outputStream.write(request);
+            }
             return true;
 
         } catch (IOException e) {
@@ -437,7 +445,7 @@ public class ComfoAirSerialConnector implements SerialPortEventListener {
      * @param data
      * @return
      */
-    public static String dumpData(int[] data) {
+    public static String dumpData(Integer[] data) {
 
         StringBuffer sb = new StringBuffer();
         for (int ch : data) {
@@ -462,17 +470,17 @@ public class ComfoAirSerialConnector implements SerialPortEventListener {
      * @param preRequestData
      * @return new build int values array
      */
-    private int[] buildRequestData(ComfoAirCommand command, int[] preRequestData) {
-        int[] newRequestData;
+    private Integer @Nullable [] buildRequestData(ComfoAirCommand command, Integer @Nullable [] preRequestData) {
+        Integer[] newRequestData;
 
         int requestCmd = command.getRequestCmd();
         int dataPosition = command.getDataPosition();
         int requestValue = command.getRequestValue();
 
         if (requestCmd == 0xcb) {
-            newRequestData = new int[8];
+            newRequestData = new Integer[8];
 
-            if (newRequestData.length <= preRequestData.length) {
+            if (preRequestData != null && newRequestData.length <= preRequestData.length) {
 
                 for (int i = 0; i < newRequestData.length; i++) {
 
@@ -488,9 +496,9 @@ public class ComfoAirSerialConnector implements SerialPortEventListener {
             }
 
         } else if (requestCmd == 0xcf) {
-            newRequestData = new int[9];
+            newRequestData = new Integer[9];
 
-            if (newRequestData.length <= preRequestData.length) {
+            if (preRequestData != null && newRequestData.length <= preRequestData.length) {
 
                 for (int i = 0; i < newRequestData.length; i++) {
                     int j = i > 5 ? i + 4 : i;
@@ -507,9 +515,9 @@ public class ComfoAirSerialConnector implements SerialPortEventListener {
             }
 
         } else if (requestCmd == 0xd7) {
-            newRequestData = new int[8];
+            newRequestData = new Integer[8];
 
-            if (newRequestData.length <= preRequestData.length) {
+            if (preRequestData != null && newRequestData.length <= preRequestData.length) {
 
                 for (int i = 0; i < newRequestData.length; i++) {
                     int j = i > 5 ? i + 3 : i;
@@ -535,9 +543,9 @@ public class ComfoAirSerialConnector implements SerialPortEventListener {
             }
 
         } else if (requestCmd == 0xed) {
-            newRequestData = new int[5];
+            newRequestData = new Integer[5];
 
-            if (newRequestData.length <= preRequestData.length) {
+            if (preRequestData != null && newRequestData.length <= preRequestData.length) {
 
                 for (int i = 0; i < newRequestData.length; i++) {
                     int j = i > 3 ? i + 2 : i;
@@ -554,9 +562,9 @@ public class ComfoAirSerialConnector implements SerialPortEventListener {
             }
 
         } else if (requestCmd == 0x9f) {
-            newRequestData = new int[19];
+            newRequestData = new Integer[19];
 
-            if (newRequestData.length <= preRequestData.length) {
+            if (preRequestData != null && newRequestData.length <= preRequestData.length) {
 
                 for (int i = 0; i < newRequestData.length; i++) {
 

@@ -26,7 +26,7 @@ public class ComfoAirCommand {
     private List<String> keys;
     private Integer requestCmd;
     private Integer replyCmd;
-    private int[] requestData;
+    private Integer[] requestData;
     private Integer requestValue;
     private Integer dataPosition;
 
@@ -45,8 +45,8 @@ public class ComfoAirCommand {
      *            request byte position
      */
 
-    public ComfoAirCommand(String key, Integer requestCmd, Integer replyCmd, int[] requestData, Integer dataPosition,
-            Integer requestValue) {
+    public ComfoAirCommand(String key, Integer requestCmd, Integer replyCmd, Integer[] requestData,
+            Integer dataPosition, Integer requestValue) {
         this.keys = new ArrayList<String>();
         this.keys.add(key);
         this.requestCmd = requestCmd;
@@ -81,7 +81,7 @@ public class ComfoAirCommand {
     /**
      * @return request data as byte values
      */
-    public int[] getRequestData() {
+    public Integer[] getRequestData() {
         return requestData;
     }
 
@@ -123,7 +123,7 @@ public class ComfoAirCommand {
     /**
      * set request data byte values
      */
-    public void setRequestData(int[] newRequestData) {
+    public void setRequestData(Integer[] newRequestData) {
         requestData = newRequestData;
     }
 }

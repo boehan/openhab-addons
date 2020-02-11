@@ -32,7 +32,7 @@ public class DataTypeTemperature implements ComfoAirDataType {
      * {@inheritDoc}
      */
     @Override
-    public State convertToState(int[] data, ComfoAirCommandType commandType) {
+    public State convertToState(Integer[] data, ComfoAirCommandType commandType) {
 
         if (data == null || commandType == null) {
             logger.trace("\"DataTypeTemperature\" class \"convertToState\" method parameter: null");
@@ -51,14 +51,14 @@ public class DataTypeTemperature implements ComfoAirDataType {
      * {@inheritDoc}
      */
     @Override
-    public int[] convertFromState(State value, ComfoAirCommandType commandType) {
+    public Integer[] convertFromState(State value, ComfoAirCommandType commandType) {
 
         if (value == null || commandType == null) {
             logger.trace("\"DataTypeTemperature\" class \"convertFromState\" method parameter: null");
             return null;
         } else {
 
-            int[] template = commandType.getChangeDataTemplate();
+            Integer[] template = commandType.getChangeDataTemplate();
 
             template[commandType.getChangeDataPos()] = (int) (((DecimalType) value).doubleValue() + 20) * 2;
 

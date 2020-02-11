@@ -33,7 +33,7 @@ public class DataTypeBoolean implements ComfoAirDataType {
      * {@inheritDoc}
      */
     @Override
-    public State convertToState(int[] data, ComfoAirCommandType commandType) {
+    public State convertToState(Integer[] data, ComfoAirCommandType commandType) {
 
         if (data == null || commandType == null) {
             logger.trace("\"DataTypeBoolean\" class \"convertToState\" method parameter: null");
@@ -56,7 +56,7 @@ public class DataTypeBoolean implements ComfoAirDataType {
      * {@inheritDoc}
      */
     @Override
-    public int[] convertFromState(State value, ComfoAirCommandType commandType) {
+    public Integer[] convertFromState(State value, ComfoAirCommandType commandType) {
 
         if (value == null || commandType == null) {
             logger.trace("\"DataTypeBoolean\" class \"convertFromState\" method parameter: null");
@@ -65,7 +65,7 @@ public class DataTypeBoolean implements ComfoAirDataType {
             DecimalType decimalValue = value.as(DecimalType.class);
 
             if (decimalValue != null) {
-                int[] template = commandType.getChangeDataTemplate();
+                Integer[] template = commandType.getChangeDataTemplate();
 
                 template[commandType.getChangeDataPos()] = decimalValue.intValue() == 1
                         ? commandType.getPossibleValues()[0]

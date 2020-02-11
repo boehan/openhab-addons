@@ -32,7 +32,7 @@ public class DataTypeRPM implements ComfoAirDataType {
      * {@inheritDoc}
      */
     @Override
-    public State convertToState(int[] data, ComfoAirCommandType commandType) {
+    public State convertToState(Integer[] data, ComfoAirCommandType commandType) {
 
         if (data == null || commandType == null) {
             logger.trace("\"DataTypeRPM\" class \"convertToState\" method parameter: null");
@@ -62,14 +62,14 @@ public class DataTypeRPM implements ComfoAirDataType {
      * {@inheritDoc}
      */
     @Override
-    public int[] convertFromState(State value, ComfoAirCommandType commandType) {
+    public Integer[] convertFromState(State value, ComfoAirCommandType commandType) {
 
         if (value == null || commandType == null) {
             logger.trace("\"DataTypeRPM\" class \"convertFromState\" method parameter: null");
             return null;
         } else {
 
-            int[] template = commandType.getChangeDataTemplate();
+            Integer[] template = commandType.getChangeDataTemplate();
 
             template[commandType.getChangeDataPos()] = (int) (1875000 / ((DecimalType) value).doubleValue());
 

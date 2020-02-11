@@ -27,11 +27,11 @@ public interface ComfoAirDataType {
     /**
      * Generate a openHAB State object based on response data.
      *
-     * @param data
+     * @param response
      * @param commandType
      * @return converted State object
      */
-    State convertToState(int[] data, ComfoAirCommandType commandType);
+    State convertToState(Integer[] response, ComfoAirCommandType commandType);
 
     /**
      * Generate byte array based on a openHAB State.
@@ -40,6 +40,6 @@ public interface ComfoAirDataType {
      * @param commandType
      * @return converted byte array
      */
-    int[] convertFromState(State value, ComfoAirCommandType commandType);
+    Integer[] convertFromState(State value, ComfoAirCommandType commandType);
 
 }
