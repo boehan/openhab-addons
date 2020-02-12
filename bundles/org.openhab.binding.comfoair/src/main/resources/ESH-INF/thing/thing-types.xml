@@ -9,13 +9,25 @@
 				<description>Provides a generic access to a ComfoAir compatible ventilation system</description>
 
 				<channel-groups>
-						<channel-group id="sensorValues" typeId="sensorValues" />
-						<channel-group id="controls" typeId="controls" />
-						<channel-group id="status" typeId="status" />
+						<channel-group id="bindingControl" typeId="bindingControl" />
+						<channel-group id="ccease" typeId="ccease" />
+						<channel-group id="ventilation" typeId="ventilation" />
+						<channel-group id="temperatures" typeId="temperatures" />
+						<channel-group id="times" typeId="times" />
+						<channel-group id="bypass" typeId="bypass" />
+						<!-- <channel-group id="preheater" typeId="preheater" /> -->
+						<channel-group id="ewt" typeId="ewt" />
+						<channel-group id="heater" typeId="heater" />
+						<channel-group id="cookerhood" typeId="cookerhood" />
+						<channel-group id="options" typeId="options" />
+						<channel-group id="menuP1" typeId="menuP1" />
+						<channel-group id="menuP2" typeId="menuP2" />
+						<channel-group id="menuP9" typeId="menuP9" />
+						<channel-group id="inputs" typeId="inputs" />
 				</channel-groups>
 
 				<config-description>
-						<parameter name="port" type="text" required="true">
+						<parameter name="serialPort" type="text" required="true">
 								<label>Serial port</label>
 								<context>serial-port</context>
 								<description>Serial port that the ComfoAir is connected to</description>
@@ -109,7 +121,7 @@
 						<channel id="bypassSummer" typeId="bypass_summer" />
 				</channels>
 		</channel-group-type>
-
+<!--
 		<channel-group-type id="preheater">
 				<label>Preheater values</label>
 				<channels>
@@ -120,7 +132,7 @@
 						<channel id="preheaterSafety" typeId="preheater_safety" />
 				</channels>
 		</channel-group-type>
-
+-->
 		<channel-group-type id="ewt">
 				<label>EWT values</label>
 				<channels>
@@ -475,7 +487,7 @@
 				<state readOnly="true"/>
 		</channel-type>
 
-		<channel-type id="isHeaterSensor" advanced="true">
+		<channel-type id="is_heater_sensor" advanced="true">
 				<item-type>Switch</item-type>
 				<label>Heater sensor available</label>
 				<description>Availability of heater temperature sensor</description>
@@ -893,7 +905,7 @@
 				<state readOnly="true"/>
 		</channel-type>
 
-		<channel-type id="is_WTW" advanced="true">
+		<channel-type id="is_wtw" advanced="true">
 				<item-type>Switch</item-type>
 				<label>Heat recovery</label>
 				<description>Availability of heat recovery (WTW)</description>
@@ -998,10 +1010,10 @@
 				<state min="0" max="180" step="1" readOnly="false" />
 		</channel-type>
 
-		<channel-type id="bathroom_end_delay" advanced="true">
+		<channel-type id="bathroom_start_delay" advanced="true">
 				<item-type>Number</item-type>
-				<label>Menu P22</label>
-				<description>End delay for bathroom switch (min)</description>
+				<label>Menu P21</label>
+				<description>Start delay for bathroom switch (min)</description>
 				<category>Time</category>
 				<state min="0" max="120" step="1" readOnly="false" />
 		</channel-type>
