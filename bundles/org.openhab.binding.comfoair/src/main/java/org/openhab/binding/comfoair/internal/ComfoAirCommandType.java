@@ -2079,8 +2079,8 @@ public enum ComfoAirCommandType {
     /**
      * @return generate a byte value sequence for the response stream
      */
-    public Integer[] getChangeDataTemplate() {
-        Integer[] template = new Integer[change_data_size];
+    public int[] getChangeDataTemplate() {
+        int[] template = new int[change_data_size];
         for (int i = 0; i < template.length; i++) {
             template[i] = 0x00;
         }
@@ -2112,10 +2112,10 @@ public enum ComfoAirCommandType {
         ComfoAirCommandType commandType = ComfoAirCommandType.getCommandTypeByKey(key);
 
         if (commandType != null) {
-            Integer getCmd = new Integer(commandType.read_command);
+            Integer getCmd = commandType.read_command == 0 ? null : new Integer(commandType.read_command);
             Integer replyCmd = new Integer(commandType.read_reply_command);
 
-            return new ComfoAirCommand(key, getCmd, replyCmd, null, null, null);
+            return new ComfoAirCommand(key, getCmd, replyCmd, new int[0], null, null);
         }
         return null;
     }
@@ -2135,7 +2135,7 @@ public enum ComfoAirCommandType {
 
         if (commandType != null && decimalValue != null) {
             ComfoAirDataType dataType = commandType.getDataType();
-            Integer[] data = dataType.convertFromState(value, commandType);
+            int[] data = dataType.convertFromState(value, commandType);
             int dataPossition = commandType.getChangeDataPos();
             int intValue = decimalValue.intValue();
 
@@ -2164,7 +2164,7 @@ public enum ComfoAirCommandType {
             Integer getCmd = commandType.read_command == 0 ? null : new Integer(commandType.read_command);
             Integer replyCmd = new Integer(commandType.read_reply_command);
 
-            ComfoAirCommand command = new ComfoAirCommand(key, getCmd, replyCmd, null, null, null);
+            ComfoAirCommand command = new ComfoAirCommand(key, getCmd, replyCmd, new int[0], null, null);
             commands.put(command.getReplyCmd(), command);
         }
 
@@ -2183,7 +2183,7 @@ public enum ComfoAirCommandType {
             ComfoAirCommand command = commands.get(replyCmd);
 
             if (command == null) {
-                command = new ComfoAirCommand(affectedKey, getCmd, replyCmd, null, null, null);
+                command = new ComfoAirCommand(affectedKey, getCmd, replyCmd, new int[0], null, null);
                 commands.put(command.getReplyCmd(), command);
             } else {
                 command.addKey(affectedKey);
@@ -2215,7 +2215,7 @@ public enum ComfoAirCommandType {
             ComfoAirCommand command = commands.get(replyCmd);
 
             if (command == null) {
-                command = new ComfoAirCommand(entry.key, getCmd, replyCmd, null, null, null);
+                command = new ComfoAirCommand(entry.key, getCmd, replyCmd, new int[0], null, null);
                 commands.put(command.getReplyCmd(), command);
             } else {
                 command.addKey(entry.key);

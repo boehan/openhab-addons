@@ -90,7 +90,7 @@ public class ComfoAirSerialConnector implements SerialPortEventListener {
                         OnOffType.ON);
 
                 if (command != null) {
-                    sendCommand(command, null);
+                    sendCommand(command, new int[0]);
                 } else {
                     logger.debug("Failure while creating COMMAND: {}", command);
                 }
@@ -125,7 +125,7 @@ public class ComfoAirSerialConnector implements SerialPortEventListener {
                     OnOffType.OFF);
 
             if (command != null) {
-                sendCommand(command, null);
+                sendCommand(command, new int[0]);
             } else {
                 logger.debug("Failure while creating COMMAND: {}", command);
             }
@@ -143,157 +143,160 @@ public class ComfoAirSerialConnector implements SerialPortEventListener {
      * @param preRequestData
      * @return reply byte values
      */
-    public synchronized Integer @Nullable [] sendCommand(ComfoAirCommand command, Integer @Nullable [] preRequestData) {
-        int requestCmd = command.getRequestCmd();
+    public synchronized int[] sendCommand(ComfoAirCommand command, int[] preRequestData) {
+        Integer requestCmd = command.getRequestCmd();
         int retry = 0;
 
-        // Switch support for app or ccease control
-        if (requestCmd == 0x9b) {
-            isSuspended = !isSuspended;
-        } else if (requestCmd == 0x9c) {
-            return new Integer[] { isSuspended ? 0x00 : 0x03 };
-        } else if (isSuspended) {
-            logger.trace("Ignore cmd. Service is currently suspended");
-            return null;
-        }
+        if (requestCmd != null) {
+            // Switch support for app or ccease control
+            if (requestCmd == 0x9b) {
+                isSuspended = !isSuspended;
+            } else if (requestCmd == 0x9c) {
+                return new int[] { isSuspended ? 0x00 : 0x03 };
+            } else if (isSuspended) {
+                logger.trace("Ignore cmd. Service is currently suspended");
+                return new int[0];
+            }
 
-        do {
-            // If preRequestData param was send (preRequestData is sending for write command)
-            Integer[] requestData;
+            do {
+                // If preRequestData param was send (preRequestData is sending for write command)
+                int[] requestData;
 
-            if (preRequestData == null) {
-                requestData = command.getRequestData();
-            } else {
-                requestData = buildRequestData(command, preRequestData);
+                if (preRequestData.length <= 0) {
+                    requestData = command.getRequestData();
+                } else {
+                    requestData = buildRequestData(command, preRequestData);
 
-                if (requestData == null) {
-                    logger.debug("Unable to build data for write command: {}",
-                            String.format("%02x", command.getReplyCmd()));
-                    return null;
+                    if (requestData.length <= 0) {
+                        logger.debug("Unable to build data for write command: {}",
+                                String.format("%02x", command.getReplyCmd()));
+                        return new int[0];
+                    }
                 }
-            }
 
-            // Fake read request for ccease properties
-            if (requestData == null && requestCmd == 0x37) {
-                requestData = new Integer[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-            }
+                // Fake read request for ccease properties
+                if (requestData.length <= 0 && requestCmd == 0x37) {
+                    requestData = new int[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                }
 
-            byte[] requestBlock = calculateRequest(requestCmd, requestData);
-            logger.trace("send DATA: {}", dumpData(requestBlock));
+                byte[] requestBlock = calculateRequest(requestCmd, requestData);
+                logger.trace("send DATA: {}", dumpData(requestBlock));
 
-            if (!send(requestBlock)) {
-                return null;
-            }
+                if (!send(requestBlock)) {
+                    return new int[0];
+                }
 
-            byte[] responseBlock = new byte[0];
+                byte[] responseBlock = new byte[0];
 
-            try {
+                try {
+                    InputStream inputStream = this.inputStream;
+                    // 31 is max. response length
+                    byte[] readBuffer = new byte[31];
 
-                // 31 is max. response length
-                byte[] readBuffer = new byte[31];
+                    do {
+                        while (inputStream != null && inputStream.available() > 0) {
 
-                do {
-                    while (inputStream != null && inputStream.available() > 0) {
+                            int bytes = inputStream.read(readBuffer);
 
-                        int bytes = inputStream.read(readBuffer);
+                            // merge bytes
+                            byte[] mergedBytes = new byte[responseBlock.length + bytes];
+                            System.arraycopy(responseBlock, 0, mergedBytes, 0, responseBlock.length);
+                            System.arraycopy(readBuffer, 0, mergedBytes, responseBlock.length, bytes);
 
-                        // merge bytes
-                        byte[] mergedBytes = new byte[responseBlock.length + bytes];
-                        System.arraycopy(responseBlock, 0, mergedBytes, 0, responseBlock.length);
-                        System.arraycopy(readBuffer, 0, mergedBytes, responseBlock.length, bytes);
-
-                        responseBlock = mergedBytes;
-                    }
-                    try {
-                        // add wait states around reading the stream, so that
-                        // interrupted transmissions are merged
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        // ignore interruption
-                    }
-
-                } while (inputStream != null && inputStream.available() > 0);
-
-                // check for ACK
-                if (responseBlock.length >= 2 && responseBlock[0] == (byte) 0x07 && responseBlock[1] == (byte) 0xf3) {
-                    if (command.getReplyCmd() == null) {
-                        // confirm additional data with an ACK
-                        if (responseBlock.length > 2) {
-                            send(ACK);
+                            responseBlock = mergedBytes;
                         }
-                        return null;
-                    }
+                        try {
+                            // add wait states around reading the stream, so that
+                            // interrupted transmissions are merged
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            // ignore interruption
+                        }
 
-                    // check for start and end sequence and if the response cmd
-                    // matches
-                    // 11 is the minimum response length with one data byte
-                    if (responseBlock.length >= 11 && responseBlock[2] == (byte) 0x07 && responseBlock[3] == (byte) 0xf0
-                            && responseBlock[responseBlock.length - 2] == (byte) 0x07
-                            && responseBlock[responseBlock.length - 1] == (byte) 0x0f
-                            && (responseBlock[5] & 0xff) == command.getReplyCmd()) {
+                    } while (inputStream != null && inputStream.available() > 0);
 
-                        logger.trace("receive RAW DATA: {}", dumpData(responseBlock));
-
-                        byte[] cleanedBlock = cleanupBlock(responseBlock);
-
-                        int dataSize = cleanedBlock[2];
-
-                        // the cleanedBlock size should equal dataSize + 2 cmd
-                        // bytes and + 1 checksum byte
-                        if (dataSize + 3 == cleanedBlock.length - 1) {
-
-                            byte checksum = cleanedBlock[dataSize + 3];
-                            Integer[] replyData = new Integer[dataSize];
-                            for (int i = 0; i < dataSize; i++) {
-                                replyData[i] = cleanedBlock[i + 3] & 0xff;
-                            }
-
-                            byte[] _block = new byte[3 + replyData.length];
-                            System.arraycopy(cleanedBlock, 0, _block, 0, _block.length);
-
-                            // validate calculated checksum against submitted
-                            // checksum
-                            if (calculateChecksum(_block) == checksum) {
-
-                                logger.trace("receive CMD: {} DATA: {}", String.format("%02x", command.getReplyCmd()),
-                                        dumpData(replyData));
-
+                    // check for ACK
+                    if (responseBlock.length >= 2 && responseBlock[0] == (byte) 0x07
+                            && responseBlock[1] == (byte) 0xf3) {
+                        if (command.getReplyCmd() == null) {
+                            // confirm additional data with an ACK
+                            if (responseBlock.length > 2) {
                                 send(ACK);
-
-                                return replyData;
                             }
-
-                            logger.debug("Unable to handle data. Checksum verification failed");
-                        } else {
-                            logger.debug("Unable to handle data. Data size not valid");
+                            return new int[0];
                         }
 
-                        logger.trace("skip CMD: {} DATA: {}", String.format("%02x", command.getReplyCmd()),
-                                dumpData(cleanedBlock));
+                        // check for start and end sequence and if the response cmd
+                        // matches
+                        // 11 is the minimum response length with one data byte
+                        if (responseBlock.length >= 11 && responseBlock[2] == (byte) 0x07
+                                && responseBlock[3] == (byte) 0xf0
+                                && responseBlock[responseBlock.length - 2] == (byte) 0x07
+                                && responseBlock[responseBlock.length - 1] == (byte) 0x0f
+                                && (responseBlock[5] & 0xff) == command.getReplyCmd()) {
+
+                            logger.trace("receive RAW DATA: {}", dumpData(responseBlock));
+
+                            byte[] cleanedBlock = cleanupBlock(responseBlock);
+
+                            int dataSize = cleanedBlock[2];
+
+                            // the cleanedBlock size should equal dataSize + 2 cmd
+                            // bytes and + 1 checksum byte
+                            if (dataSize + 3 == cleanedBlock.length - 1) {
+
+                                byte checksum = cleanedBlock[dataSize + 3];
+                                int[] replyData = new int[dataSize];
+                                for (int i = 0; i < dataSize; i++) {
+                                    replyData[i] = cleanedBlock[i + 3] & 0xff;
+                                }
+
+                                byte[] _block = new byte[3 + replyData.length];
+                                System.arraycopy(cleanedBlock, 0, _block, 0, _block.length);
+
+                                // validate calculated checksum against submitted
+                                // checksum
+                                if (calculateChecksum(_block) == checksum) {
+
+                                    logger.trace("receive CMD: {} DATA: {}",
+                                            String.format("%02x", command.getReplyCmd()), dumpData(replyData));
+
+                                    send(ACK);
+
+                                    return replyData;
+                                }
+
+                                logger.debug("Unable to handle data. Checksum verification failed");
+                            } else {
+                                logger.debug("Unable to handle data. Data size not valid");
+                            }
+
+                            logger.trace("skip CMD: {} DATA: {}", String.format("%02x", command.getReplyCmd()),
+                                    dumpData(cleanedBlock));
+                        }
                     }
+
+                } catch (IOException e) {
+                    logger.debug("IO error: {}", e.getMessage());
                 }
 
-            } catch (IOException e) {
-                logger.debug("IO error: {}", e.getMessage());
+                try {
+
+                    Thread.sleep(1000);
+                    logger.debug("Retry cmd. Last call was not successful. Request: {} Response: {}",
+                            dumpData(requestBlock), (responseBlock.length > 0 ? dumpData(responseBlock) : "null"));
+
+                } catch (InterruptedException e) {
+                    // ignore interruption
+                }
+
+            } while (retry++ < 5);
+
+            if (retry == 5) {
+                logger.debug("Unable to send command. {} retries failed.", retry);
             }
-
-            try {
-
-                Thread.sleep(1000);
-                logger.debug("Retry cmd. Last call was not successful. Request: {} Response: {}",
-                        dumpData(requestBlock), (responseBlock.length > 0 ? dumpData(responseBlock) : "null"));
-
-            } catch (InterruptedException e) {
-                // ignore interruption
-            }
-
-        } while (retry++ < 5);
-
-        if (retry == 5) {
-            logger.debug("Unable to send command. {} retries failed.", retry);
         }
-
-        return null;
+        return new int[0];
     }
 
     /**
@@ -304,19 +307,19 @@ public class ComfoAirSerialConnector implements SerialPortEventListener {
      * @param requestData
      * @return response byte value block with cmd, data and checksum
      */
-    private byte[] calculateRequest(int command, Integer @Nullable [] requestData) {
+    private byte[] calculateRequest(int command, int[] requestData) {
 
         // generate the command block (cmd and request data)
-        int length = requestData == null ? 0 : requestData.length;
+        int length = requestData.length;
 
         byte[] block = new byte[4 + length];
 
         block[0] = 0x00;
         block[1] = (byte) command;
         block[2] = (byte) length;
-        if (requestData != null) {
+        if (requestData.length > 0) {
             for (int i = 0; i < requestData.length; i++) {
-                block[i + 3] = requestData[i].byteValue();
+                block[i + 3] = (byte) requestData[i];
             }
         }
 
@@ -442,13 +445,13 @@ public class ComfoAirSerialConnector implements SerialPortEventListener {
     /**
      * Is used to debug byte values.
      *
-     * @param data
+     * @param replyData
      * @return
      */
-    public static String dumpData(Integer[] data) {
+    public static String dumpData(int[] replyData) {
 
         StringBuffer sb = new StringBuffer();
-        for (int ch : data) {
+        for (int ch : replyData) {
             sb.append(String.format(" %02x", ch));
         }
         return sb.toString();
@@ -470,129 +473,135 @@ public class ComfoAirSerialConnector implements SerialPortEventListener {
      * @param preRequestData
      * @return new build int values array
      */
-    private Integer @Nullable [] buildRequestData(ComfoAirCommand command, Integer @Nullable [] preRequestData) {
-        Integer[] newRequestData;
+    private int[] buildRequestData(ComfoAirCommand command, int[] preRequestData) {
+        int[] newRequestData;
 
-        int requestCmd = command.getRequestCmd();
-        int dataPosition = command.getDataPosition();
-        int requestValue = command.getRequestValue();
+        Integer requestCmd = command.getRequestCmd();
+        Integer dataPosition = command.getDataPosition();
+        Integer requestValue = command.getRequestValue();
+        logger.debug("Building request data: requestCmd = {}, dataPosition = {}, requestValue = {}", requestCmd,
+                dataPosition, requestValue);
 
-        if (requestCmd == 0xcb) {
-            newRequestData = new Integer[8];
+        if (requestCmd != null && dataPosition != null && requestValue != null) {
+            if (requestCmd == 0xcb) {
+                newRequestData = new int[8];
 
-            if (preRequestData != null && newRequestData.length <= preRequestData.length) {
+                if (preRequestData.length > 0 && newRequestData.length <= preRequestData.length) {
 
-                for (int i = 0; i < newRequestData.length; i++) {
+                    for (int i = 0; i < newRequestData.length; i++) {
 
-                    if (dataPosition == i) {
-                        newRequestData[i] = requestValue;
-                    } else {
-                        newRequestData[i] = preRequestData[i];
+                        if (dataPosition == i) {
+                            newRequestData[i] = requestValue;
+                        } else {
+                            newRequestData[i] = preRequestData[i];
+                        }
                     }
+
+                } else {
+                    return new int[0];
                 }
 
-            } else {
-                return null;
-            }
+            } else if (requestCmd == 0xcf) {
+                newRequestData = new int[9];
 
-        } else if (requestCmd == 0xcf) {
-            newRequestData = new Integer[9];
+                if (preRequestData.length > 0 && newRequestData.length <= preRequestData.length) {
 
-            if (preRequestData != null && newRequestData.length <= preRequestData.length) {
+                    for (int i = 0; i < newRequestData.length; i++) {
+                        int j = i > 5 ? i + 4 : i;
 
-                for (int i = 0; i < newRequestData.length; i++) {
-                    int j = i > 5 ? i + 4 : i;
-
-                    if (dataPosition == i) {
-                        newRequestData[i] = requestValue;
-                    } else {
-                        newRequestData[i] = preRequestData[j];
+                        if (dataPosition == i) {
+                            newRequestData[i] = requestValue;
+                        } else {
+                            newRequestData[i] = preRequestData[j];
+                        }
                     }
+
+                } else {
+                    return new int[0];
                 }
 
-            } else {
-                return null;
-            }
+            } else if (requestCmd == 0xd7) {
+                newRequestData = new int[8];
 
-        } else if (requestCmd == 0xd7) {
-            newRequestData = new Integer[8];
+                if (preRequestData.length > 0 && newRequestData.length <= preRequestData.length) {
 
-            if (preRequestData != null && newRequestData.length <= preRequestData.length) {
+                    for (int i = 0; i < newRequestData.length; i++) {
+                        int j = i > 5 ? i + 3 : i;
 
-                for (int i = 0; i < newRequestData.length; i++) {
-                    int j = i > 5 ? i + 3 : i;
+                        if (dataPosition == i) {
 
-                    if (dataPosition == i) {
+                            if (dataPosition == 4) {
+                                requestValue = checkByteAndCalculateValue(command, requestValue, preRequestData[j]);
 
-                        if (dataPosition == 4) {
-                            requestValue = checkByteAndCalculateValue(command, requestValue, preRequestData[j]);
+                                newRequestData[i] = preRequestData[j] + requestValue;
 
-                            newRequestData[i] = preRequestData[j] + requestValue;
+                            } else {
+                                newRequestData[i] = requestValue;
+                            }
 
                         } else {
-                            newRequestData[i] = requestValue;
+                            newRequestData[i] = preRequestData[j];
                         }
-
-                    } else {
-                        newRequestData[i] = preRequestData[j];
                     }
+
+                } else {
+                    return new int[0];
                 }
 
-            } else {
-                return null;
-            }
+            } else if (requestCmd == 0xed) {
+                newRequestData = new int[5];
 
-        } else if (requestCmd == 0xed) {
-            newRequestData = new Integer[5];
+                if (preRequestData.length > 0 && newRequestData.length <= preRequestData.length) {
 
-            if (preRequestData != null && newRequestData.length <= preRequestData.length) {
+                    for (int i = 0; i < newRequestData.length; i++) {
+                        int j = i > 3 ? i + 2 : i;
 
-                for (int i = 0; i < newRequestData.length; i++) {
-                    int j = i > 3 ? i + 2 : i;
-
-                    if (dataPosition == i) {
-                        newRequestData[i] = requestValue;
-                    } else {
-                        newRequestData[i] = preRequestData[j];
+                        if (dataPosition == i) {
+                            newRequestData[i] = requestValue;
+                        } else {
+                            newRequestData[i] = preRequestData[j];
+                        }
                     }
+
+                } else {
+                    return new int[0];
                 }
 
-            } else {
-                return null;
-            }
+            } else if (requestCmd == 0x9f) {
+                newRequestData = new int[19];
 
-        } else if (requestCmd == 0x9f) {
-            newRequestData = new Integer[19];
+                if (preRequestData.length > 0 && newRequestData.length <= preRequestData.length) {
 
-            if (preRequestData != null && newRequestData.length <= preRequestData.length) {
+                    for (int i = 0; i < newRequestData.length; i++) {
 
-                for (int i = 0; i < newRequestData.length; i++) {
+                        if (dataPosition == i) {
 
-                    if (dataPosition == i) {
+                            if (dataPosition == 0 || dataPosition == 1 || dataPosition == 2) {
+                                requestValue = checkByteAndCalculateValue(command, requestValue, preRequestData[i]);
 
-                        if (dataPosition == 0 || dataPosition == 1 || dataPosition == 2) {
-                            requestValue = checkByteAndCalculateValue(command, requestValue, preRequestData[i]);
+                                newRequestData[i] = preRequestData[i] + requestValue;
 
-                            newRequestData[i] = preRequestData[i] + requestValue;
+                            } else {
+                                newRequestData[i] = requestValue;
+                            }
 
                         } else {
-                            newRequestData[i] = requestValue;
+                            newRequestData[i] = preRequestData[i];
                         }
-
-                    } else {
-                        newRequestData[i] = preRequestData[i];
                     }
+
+                } else {
+                    return new int[0];
                 }
 
             } else {
-                return null;
+                return new int[0];
             }
 
+            return newRequestData;
         } else {
-            return null;
+            return new int[0];
         }
-
-        return newRequestData;
     }
 
     /**

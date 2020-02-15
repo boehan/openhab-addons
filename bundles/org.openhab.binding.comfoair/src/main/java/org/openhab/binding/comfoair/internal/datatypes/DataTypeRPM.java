@@ -21,8 +21,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Class to handle revolutions per minute values
  *
- * @author Grzegorz Miasko
- * @since 1.14.0
+ * @author Grzegorz Miasko - Initial Contribution
  */
 public class DataTypeRPM implements ComfoAirDataType {
 
@@ -32,7 +31,7 @@ public class DataTypeRPM implements ComfoAirDataType {
      * {@inheritDoc}
      */
     @Override
-    public State convertToState(Integer[] data, ComfoAirCommandType commandType) {
+    public State convertToState(int[] data, ComfoAirCommandType commandType) {
 
         if (data == null || commandType == null) {
             logger.trace("\"DataTypeRPM\" class \"convertToState\" method parameter: null");
@@ -62,14 +61,14 @@ public class DataTypeRPM implements ComfoAirDataType {
      * {@inheritDoc}
      */
     @Override
-    public Integer[] convertFromState(State value, ComfoAirCommandType commandType) {
+    public int[] convertFromState(State value, ComfoAirCommandType commandType) {
 
         if (value == null || commandType == null) {
             logger.trace("\"DataTypeRPM\" class \"convertFromState\" method parameter: null");
             return null;
         } else {
 
-            Integer[] template = commandType.getChangeDataTemplate();
+            int[] template = commandType.getChangeDataTemplate();
 
             template[commandType.getChangeDataPos()] = (int) (1875000 / ((DecimalType) value).doubleValue());
 

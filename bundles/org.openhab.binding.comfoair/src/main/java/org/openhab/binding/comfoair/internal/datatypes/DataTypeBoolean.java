@@ -22,8 +22,8 @@ import org.slf4j.LoggerFactory;
 /**
  * Class to handle boolean values which are handled as decimal 0/1 states
  *
- * @author Holger Hees
- * @author Hans Böhm
+ * @author Holger Hees - Initial Contribution
+ * @author Hans Böhm - Refactoring
  */
 public class DataTypeBoolean implements ComfoAirDataType {
 
@@ -33,7 +33,7 @@ public class DataTypeBoolean implements ComfoAirDataType {
      * {@inheritDoc}
      */
     @Override
-    public State convertToState(Integer[] data, ComfoAirCommandType commandType) {
+    public State convertToState(int[] data, ComfoAirCommandType commandType) {
 
         if (data == null || commandType == null) {
             logger.trace("\"DataTypeBoolean\" class \"convertToState\" method parameter: null");
@@ -56,7 +56,7 @@ public class DataTypeBoolean implements ComfoAirDataType {
      * {@inheritDoc}
      */
     @Override
-    public Integer[] convertFromState(State value, ComfoAirCommandType commandType) {
+    public int[] convertFromState(State value, ComfoAirCommandType commandType) {
 
         if (value == null || commandType == null) {
             logger.trace("\"DataTypeBoolean\" class \"convertFromState\" method parameter: null");
@@ -65,7 +65,7 @@ public class DataTypeBoolean implements ComfoAirDataType {
             DecimalType decimalValue = value.as(DecimalType.class);
 
             if (decimalValue != null) {
-                Integer[] template = commandType.getChangeDataTemplate();
+                int[] template = commandType.getChangeDataTemplate();
 
                 template[commandType.getChangeDataPos()] = decimalValue.intValue() == 1
                         ? commandType.getPossibleValues()[0]

@@ -23,6 +23,10 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.core.library.types.DecimalType;
+import org.eclipse.smarthome.core.library.types.OnOffType;
+import org.eclipse.smarthome.core.library.types.QuantityType;
+import org.eclipse.smarthome.core.library.unit.SIUnits;
+import org.eclipse.smarthome.core.library.unit.SmartHomeUnits;
 import org.eclipse.smarthome.core.thing.Channel;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
@@ -35,6 +39,11 @@ import org.eclipse.smarthome.core.types.State;
 import org.eclipse.smarthome.core.types.UnDefType;
 import org.eclipse.smarthome.io.transport.serial.SerialPortManager;
 import org.openhab.binding.comfoair.internal.datatypes.ComfoAirDataType;
+import org.openhab.binding.comfoair.internal.datatypes.DataTypeBoolean;
+import org.openhab.binding.comfoair.internal.datatypes.DataTypeNumber;
+import org.openhab.binding.comfoair.internal.datatypes.DataTypeRPM;
+import org.openhab.binding.comfoair.internal.datatypes.DataTypeTemperature;
+import org.openhab.binding.comfoair.internal.datatypes.DataTypeVolt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,25 +80,54 @@ public class ComfoAirHandler extends BaseThingHandler {
             }
         } else {
             try {
-                final Set<ChannelUID> channelsLinked = getThing().getChannels().stream().map(Channel::getUID)
+                Set<ChannelUID> channelsLinked = getThing().getChannels().stream().map(Channel::getUID)
                         .filter(this::isLinked).collect(Collectors.toSet());
-                final Set<String> keysToUpdate = channelsLinked.stream().map(ChannelUID::getId)
-                        .collect(Collectors.toSet());
+                Set<String> keysToUpdate = channelsLinked.stream().map(ChannelUID::getId).collect(Collectors.toSet());
 
-                final ComfoAirCommand changeCommand = ComfoAirCommandType.getChangeCommand(channelId,
-                        (DecimalType) command);
-                logger.debug("Setting state for channel: {}", channelId);
-                sendCommand(changeCommand, channelId);
+                ComfoAirCommandType comfoAirCommandType = ComfoAirCommandType.getCommandTypeByKey(channelId);
+                ComfoAirDataType dataType = comfoAirCommandType.getDataType();
+                State state = null;
 
-                Collection<ComfoAirCommand> affectedReadCommands = ComfoAirCommandType
-                        .getAffectedReadCommands(channelId, keysToUpdate);
+                if (dataType instanceof DataTypeBoolean) {
+                    state = (OnOffType) command;
+                } else if (dataType instanceof DataTypeNumber || dataType instanceof DataTypeRPM) {
+                    state = (DecimalType) command;
+                } else if (dataType instanceof DataTypeTemperature) {
+                    if (command instanceof QuantityType<?>) {
+                        QuantityType<?> celsius = ((QuantityType<?>) command).toUnit(SIUnits.CELSIUS);
+                        if (celsius != null) {
+                            state = new DecimalType(celsius.doubleValue());
+                        }
+                    } else {
+                        state = (DecimalType) command;
+                    }
+                } else if (dataType instanceof DataTypeVolt) {
+                    if (command instanceof QuantityType<?>) {
+                        QuantityType<?> volts = ((QuantityType<?>) command).toUnit(SmartHomeUnits.VOLT);
+                        if (volts != null) {
+                            state = new DecimalType(volts.doubleValue());
+                        }
+                    } else {
+                        state = (DecimalType) command;
+                    }
+                }
 
-                if (affectedReadCommands.size() > 0) {
-                    Runnable updateThread = new AffectedItemsUpdateThread(affectedReadCommands);
-                    scheduler.schedule(updateThread, 3, TimeUnit.SECONDS);
+                if (state != null) {
+                    ComfoAirCommand changeCommand = ComfoAirCommandType.getChangeCommand(channelId, state);
+                    sendCommand(changeCommand, channelId);
+
+                    Collection<ComfoAirCommand> affectedReadCommands = ComfoAirCommandType
+                            .getAffectedReadCommands(channelId, keysToUpdate);
+
+                    if (affectedReadCommands.size() > 0) {
+                        Runnable updateThread = new AffectedItemsUpdateThread(affectedReadCommands);
+                        scheduler.schedule(updateThread, 3, TimeUnit.SECONDS);
+                    }
+                } else {
+                    logger.warn("Unhandled command type: {}", command.toString());
                 }
             } catch (final RuntimeException e) {
-                logger.debug("Updating ComfoAir failed: ", e);
+                logger.warn("Updating ComfoAir failed: ", e);
                 updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR, e.getMessage());
             }
         }
@@ -152,72 +190,77 @@ public class ComfoAirHandler extends BaseThingHandler {
     }
 
     private State sendCommand(ComfoAirCommand command, String commandKey) {
-        Integer requestCmd = command.getRequestCmd();
-        Integer replyCmd = command.getReplyCmd();
-        Integer[] requestData = command.getRequestData();
+        ComfoAirSerialConnector comfoAirConnector = this.comfoAirConnector;
 
-        Integer preRequestCmd;
-        Integer preReplyCmd;
-        Integer[] preResponse = null;
+        if (comfoAirConnector != null) {
+            Integer requestCmd = command.getRequestCmd();
+            Integer replyCmd = command.getReplyCmd();
+            int[] requestData = command.getRequestData();
 
-        switch (requestCmd) {
-            case 0x9f:
-                preRequestCmd = 0x9d;
-                preReplyCmd = 0x9e;
-                break;
-            case 0xcb:
-                preRequestCmd = 0xc9;
-                preReplyCmd = 0xca;
-                break;
-            case 0xcf:
-                preRequestCmd = 0xcd;
-                preReplyCmd = 0xce;
-                break;
-            case 0xd7:
-                preRequestCmd = 0xd5;
-                preReplyCmd = 0xd6;
-                break;
-            case 0xed:
-                preRequestCmd = 0xeb;
-                preReplyCmd = 0xec;
-                break;
-            default:
-                preRequestCmd = requestCmd;
-                preReplyCmd = replyCmd;
-        }
+            Integer preRequestCmd;
+            Integer preReplyCmd;
+            int[] preResponse = new int[0];
 
-        if (!preRequestCmd.equals(requestCmd)) {
-            command.setRequestCmd(preRequestCmd);
-            command.setReplyCmd(preReplyCmd);
-            command.setRequestData(null);
+            if (requestCmd != null) {
+                switch (requestCmd) {
+                    case 0x9f:
+                        preRequestCmd = 0x9d;
+                        preReplyCmd = 0x9e;
+                        break;
+                    case 0xcb:
+                        preRequestCmd = 0xc9;
+                        preReplyCmd = 0xca;
+                        break;
+                    case 0xcf:
+                        preRequestCmd = 0xcd;
+                        preReplyCmd = 0xce;
+                        break;
+                    case 0xd7:
+                        preRequestCmd = 0xd5;
+                        preReplyCmd = 0xd6;
+                        break;
+                    case 0xed:
+                        preRequestCmd = 0xeb;
+                        preReplyCmd = 0xec;
+                        break;
+                    default:
+                        preRequestCmd = requestCmd;
+                        preReplyCmd = replyCmd;
+                }
 
-            preResponse = comfoAirConnector.sendCommand(command, null);
+                if (!preRequestCmd.equals(requestCmd)) {
+                    command.setRequestCmd(preRequestCmd);
+                    command.setReplyCmd(preReplyCmd);
+                    command.setRequestData(new int[0]);
 
-            if (preResponse == null) {
-                return UnDefType.NULL;
-            } else {
-                command.setRequestCmd(requestCmd);
-                command.setReplyCmd(replyCmd);
-                command.setRequestData(requestData);
+                    preResponse = comfoAirConnector.sendCommand(command, new int[0]);
+
+                    if (preResponse.length <= 0) {
+                        return UnDefType.NULL;
+                    } else {
+                        command.setRequestCmd(requestCmd);
+                        command.setReplyCmd(replyCmd);
+                        command.setRequestData(requestData);
+                    }
+                }
+
+                int[] response = comfoAirConnector.sendCommand(command, preResponse);
+
+                if (response.length > 0) {
+                    ComfoAirCommandType comfoAirCommandType = ComfoAirCommandType.getCommandTypeByKey(commandKey);
+
+                    ComfoAirDataType dataType = comfoAirCommandType.getDataType();
+                    State value = dataType.convertToState(response, comfoAirCommandType);
+
+                    if (value == null) {
+                        logger.warn("unexpected value for DATA: {}", ComfoAirSerialConnector.dumpData(response));
+                        return UnDefType.UNDEF;
+                    } else {
+                        return value;
+                    }
+                }
             }
         }
-
-        Integer[] response = comfoAirConnector.sendCommand(command, preResponse);
-
-        if (response != null) {
-            ComfoAirCommandType comfoAirCommandType = ComfoAirCommandType.getCommandTypeByKey(commandKey);
-
-            ComfoAirDataType dataType = comfoAirCommandType.getDataType();
-            State value = dataType.convertToState(response, comfoAirCommandType);
-
-            if (value == null) {
-                logger.error("unexpected value for DATA: {}", ComfoAirSerialConnector.dumpData(response));
-                return UnDefType.UNDEF;
-            } else {
-                return value;
-            }
-        }
-
         return UnDefType.UNDEF;
     }
 
@@ -232,12 +275,14 @@ public class ComfoAirHandler extends BaseThingHandler {
         @Override
         public void run() {
             for (ComfoAirCommand readCommand : this.affectedReadCommands) {
-                List<ComfoAirCommandType> commandTypes = ComfoAirCommandType
-                        .getCommandTypesByReplyCmd(readCommand.getReplyCmd());
+                Integer replyCmd = readCommand.getReplyCmd();
+                if (replyCmd != null) {
+                    List<ComfoAirCommandType> commandTypes = ComfoAirCommandType.getCommandTypesByReplyCmd(replyCmd);
 
-                for (ComfoAirCommandType commandType : commandTypes) {
-                    String commandKey = commandType.getKey();
-                    sendCommand(readCommand, commandKey);
+                    for (ComfoAirCommandType commandType : commandTypes) {
+                        String commandKey = commandType.getKey();
+                        sendCommand(readCommand, commandKey);
+                    }
                 }
             }
         }

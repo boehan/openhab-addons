@@ -21,8 +21,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Class to handle numeric values
  *
- * @author Holger Hees
- * @since 1.3.0
+ * @author Holger Hees - Initial Contribution
  */
 public class DataTypeNumber implements ComfoAirDataType {
 
@@ -32,7 +31,7 @@ public class DataTypeNumber implements ComfoAirDataType {
      * {@inheritDoc}
      */
     @Override
-    public State convertToState(Integer[] data, ComfoAirCommandType commandType) {
+    public State convertToState(int[] data, ComfoAirCommandType commandType) {
 
         if (data == null || commandType == null) {
             logger.trace("\"DataTypeNumber\" class \"convertToState\" method parameter: null");
@@ -78,14 +77,14 @@ public class DataTypeNumber implements ComfoAirDataType {
      * {@inheritDoc}
      */
     @Override
-    public Integer[] convertFromState(State value, ComfoAirCommandType commandType) {
+    public int[] convertFromState(State value, ComfoAirCommandType commandType) {
 
         if (value == null || commandType == null) {
             logger.trace("\"DataTypeNumber\" class \"convertFromState\" method parameter: null");
             return null;
         } else {
 
-            Integer[] template = commandType.getChangeDataTemplate();
+            int[] template = commandType.getChangeDataTemplate();
             int[] possibleValues = commandType.getPossibleValues();
             int position = commandType.getChangeDataPos();
 

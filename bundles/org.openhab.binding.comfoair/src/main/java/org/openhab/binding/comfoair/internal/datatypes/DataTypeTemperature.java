@@ -13,6 +13,8 @@
 package org.openhab.binding.comfoair.internal.datatypes;
 
 import org.eclipse.smarthome.core.library.types.DecimalType;
+import org.eclipse.smarthome.core.library.types.QuantityType;
+import org.eclipse.smarthome.core.library.unit.SIUnits;
 import org.eclipse.smarthome.core.types.State;
 import org.openhab.binding.comfoair.internal.ComfoAirCommandType;
 import org.slf4j.Logger;
@@ -21,8 +23,8 @@ import org.slf4j.LoggerFactory;
 /**
  * Class to handle temperature values
  *
- * @author Holger Hees
- * @since 1.3.0
+ * @author Holger Hees - Initial Contribution
+ * @author Hans Böhm - QuantityTypes
  */
 public class DataTypeTemperature implements ComfoAirDataType {
 
@@ -32,7 +34,7 @@ public class DataTypeTemperature implements ComfoAirDataType {
      * {@inheritDoc}
      */
     @Override
-    public State convertToState(Integer[] data, ComfoAirCommandType commandType) {
+    public State convertToState(int[] data, ComfoAirCommandType commandType) {
 
         if (data == null || commandType == null) {
             logger.trace("\"DataTypeTemperature\" class \"convertToState\" method parameter: null");
@@ -40,7 +42,8 @@ public class DataTypeTemperature implements ComfoAirDataType {
         } else {
 
             if (commandType.getGetReplyDataPos()[0] < data.length) {
-                return new DecimalType((((double) data[commandType.getGetReplyDataPos()[0]]) / 2) - 20);
+                return new QuantityType<>((((double) data[commandType.getGetReplyDataPos()[0]]) / 2) - 20,
+                        SIUnits.CELSIUS);
             } else {
                 return null;
             }
@@ -51,14 +54,14 @@ public class DataTypeTemperature implements ComfoAirDataType {
      * {@inheritDoc}
      */
     @Override
-    public Integer[] convertFromState(State value, ComfoAirCommandType commandType) {
+    public int[] convertFromState(State value, ComfoAirCommandType commandType) {
 
         if (value == null || commandType == null) {
             logger.trace("\"DataTypeTemperature\" class \"convertFromState\" method parameter: null");
             return null;
         } else {
 
-            Integer[] template = commandType.getChangeDataTemplate();
+            int[] template = commandType.getChangeDataTemplate();
 
             template[commandType.getChangeDataPos()] = (int) (((DecimalType) value).doubleValue() + 20) * 2;
 

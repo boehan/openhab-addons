@@ -399,7 +399,7 @@
 				<state readOnly="true"/>
 		</channel-type>
 
-		<channel-type id="fan_in_RPM">
+		<channel-type id="fan_in_RPM" advanced="true">
 				<item-type>Number</item-type>
 				<label>Fan in (rpm)</label>
 				<description>Current absolute speed (rpm) of incoming fan</description>
@@ -407,7 +407,7 @@
 				<state readOnly="true"/>
 		</channel-type>
 
-		<channel-type id="fan_out_RPM">
+		<channel-type id="fan_out_RPM" advanced="true">
 				<item-type>Number</item-type>
 				<label>Fan out (rpm)</label>
 				<description>Current absolute speed (rpm) of outgoing fan</description>
@@ -567,7 +567,7 @@
 				<state readOnly="true"/>
 		</channel-type>
 
-		<channel-type id="ewt_temperature">
+		<channel-type id="ewt_temperature" advanced="true">
 				<item-type>Number:Temperature</item-type>
 				<label>EWT temperature</label>
 				<description>Temperature of geothermal heat exchanger sensor</description>
@@ -575,7 +575,7 @@
 				<state readOnly="true" pattern="%.1f %unit%"/>
 		</channel-type>
 
-		<channel-type id="heater_temperature">
+		<channel-type id="heater_temperature" advanced="true">
 				<item-type>Number:Temperature</item-type>
 				<label>Heater temperature</label>
 				<description>Temperature of heater sensor</description>
@@ -583,7 +583,7 @@
 				<state readOnly="true" pattern="%.1f %unit%"/>
 		</channel-type>
 
-		<channel-type id="cookerhood_temperature">
+		<channel-type id="cookerhood_temperature" advanced="true">
 				<item-type>Number:Temperature</item-type>
 				<label>Cookerhood temperature</label>
 				<description>Temperature of cookerhood sensor</description>
@@ -591,7 +591,7 @@
 				<state readOnly="true" pattern="%.1f %unit%"/>
 		</channel-type>
 
-		<channel-type id="level0_time">
+		<channel-type id="level0_time" advanced="true">
 				<item-type>Number</item-type>
 				<label>Level 0 duration</label>
 				<description>Operating hours at level 0 (away)</description>
@@ -599,7 +599,7 @@
 				<state readOnly="true"/>
 		</channel-type>
 
-		<channel-type id="level1_time">
+		<channel-type id="level1_time" advanced="true">
 				<item-type>Number</item-type>
 				<label>Level 1 duration</label>
 				<description>Operating hours at level 1</description>
@@ -607,7 +607,7 @@
 				<state readOnly="true"/>
 		</channel-type>
 
-		<channel-type id="level2_time">
+		<channel-type id="level2_time" advanced="true">
 				<item-type>Number</item-type>
 				<label>Level 2 duration</label>
 				<description>Operating hours at level 2</description>
@@ -615,7 +615,7 @@
 				<state readOnly="true"/>
 		</channel-type>
 
-		<channel-type id="level3_time">
+		<channel-type id="level3_time" advanced="true">
 				<item-type>Number</item-type>
 				<label>Level 3 duration</label>
 				<description>Operating hours at level 3</description>

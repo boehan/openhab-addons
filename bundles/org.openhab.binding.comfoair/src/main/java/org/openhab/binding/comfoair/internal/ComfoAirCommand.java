@@ -15,20 +15,24 @@ package org.openhab.binding.comfoair.internal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
+
 /**
  * Class to encapsulate all data which is needed to send a cmd to comfoair
  *
  * @author Holger Hees - Initial Contribution
  * @author Hans Böhm - Refactoring
  */
+@NonNullByDefault
 public class ComfoAirCommand {
 
     private List<String> keys;
-    private Integer requestCmd;
-    private Integer replyCmd;
-    private Integer[] requestData;
-    private Integer requestValue;
-    private Integer dataPosition;
+    private @Nullable Integer requestCmd;
+    private @Nullable Integer replyCmd;
+    private int[] requestData;
+    private @Nullable Integer requestValue;
+    private @Nullable Integer dataPosition;
 
     /**
      * @param key
@@ -37,7 +41,7 @@ public class ComfoAirCommand {
      *            command as byte value
      * @param replyCmd
      *            reply command as byte value
-     * @param requestData
+     * @param data
      *            request byte values
      * @param requestValue
      *            request byte value
@@ -45,12 +49,12 @@ public class ComfoAirCommand {
      *            request byte position
      */
 
-    public ComfoAirCommand(String key, Integer requestCmd, Integer replyCmd, Integer[] requestData,
-            Integer dataPosition, Integer requestValue) {
+    public ComfoAirCommand(String key, @Nullable Integer requestCmd, @Nullable Integer replyCmd, int[] data,
+            @Nullable Integer dataPosition, @Nullable Integer requestValue) {
         this.keys = new ArrayList<String>();
         this.keys.add(key);
         this.requestCmd = requestCmd;
-        this.requestData = requestData;
+        this.requestData = data;
         this.requestValue = requestValue;
         this.dataPosition = dataPosition;
         this.replyCmd = replyCmd;
@@ -74,56 +78,56 @@ public class ComfoAirCommand {
     /**
      * @return command byte value
      */
-    public Integer getRequestCmd() {
+    public @Nullable Integer getRequestCmd() {
         return requestCmd;
     }
 
     /**
      * @return request data as byte values
      */
-    public Integer[] getRequestData() {
+    public int[] getRequestData() {
         return requestData;
     }
 
     /**
      * @return acknowledge cmd byte value
      */
-    public Integer getReplyCmd() {
+    public @Nullable Integer getReplyCmd() {
         return replyCmd;
     }
 
     /**
      * @return request value as byte value
      */
-    public Integer getRequestValue() {
+    public @Nullable Integer getRequestValue() {
         return requestValue;
     }
 
     /**
      * @return position of request byte
      */
-    public Integer getDataPosition() {
+    public @Nullable Integer getDataPosition() {
         return dataPosition;
     }
 
     /**
      * set request command byte value
      */
-    public void setRequestCmd(Integer newRequestCmd) {
+    public void setRequestCmd(@Nullable Integer newRequestCmd) {
         requestCmd = newRequestCmd;
     }
 
     /**
      * set reply command byte value
      */
-    public void setReplyCmd(Integer newReplyCmd) {
+    public void setReplyCmd(@Nullable Integer newReplyCmd) {
         replyCmd = newReplyCmd;
     }
 
     /**
      * set request data byte values
      */
-    public void setRequestData(Integer[] newRequestData) {
+    public void setRequestData(int[] newRequestData) {
         requestData = newRequestData;
     }
 }

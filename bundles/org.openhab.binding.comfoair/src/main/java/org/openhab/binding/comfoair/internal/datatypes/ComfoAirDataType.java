@@ -19,8 +19,7 @@ import org.openhab.binding.comfoair.internal.ComfoAirCommandType;
  * Abstract class to convert binary hex values into openHAB states and vice
  * versa
  *
- * @author Holger Hees
- * @author Hans Böhm
+ * @author Holger Hees - Initial Contribution
  */
 public interface ComfoAirDataType {
 
@@ -31,7 +30,7 @@ public interface ComfoAirDataType {
      * @param commandType
      * @return converted State object
      */
-    State convertToState(Integer[] response, ComfoAirCommandType commandType);
+    State convertToState(int[] response, ComfoAirCommandType commandType);
 
     /**
      * Generate byte array based on a openHAB State.
@@ -40,6 +39,6 @@ public interface ComfoAirDataType {
      * @param commandType
      * @return converted byte array
      */
-    Integer[] convertFromState(State value, ComfoAirCommandType commandType);
+    int[] convertFromState(State value, ComfoAirCommandType commandType);
 
 }
