@@ -846,8 +846,8 @@ public enum ComfoAirCommandType {
             change_command = 0xd7;
             change_data_size = 8;
             change_data_pos = 6;
-            change_affected = new String[] { "enthalpy#enthalpyTemperature", "enthalpy#enthalpyHumidity", "enthalpy#enthalpyLevel",
-                    "menuP9#enthalpyState", "enthalpy#enthalpyTime" };
+            change_affected = new String[] { "enthalpy#enthalpyTemperature", "enthalpy#enthalpyHumidity",
+                    "enthalpy#enthalpyLevel", "menuP9#enthalpyState", "enthalpy#enthalpyTime" };
             read_command = 0xd5;
             read_reply_command = 0xd6;
             read_reply_data_pos = new int[] { 9 };
@@ -1482,7 +1482,8 @@ public enum ComfoAirCommandType {
             change_command = 0x9f;
             change_data_size = 19;
             change_data_pos = 0;
-            change_affected = new String[] { "analog#RFMode", "analog#RFNegative", "analog#RFMin", "analog#RFMax", "analog#RFValue" };
+            change_affected = new String[] { "analog#RFMode", "analog#RFNegative", "analog#RFMin", "analog#RFMax",
+                    "analog#RFValue" };
             read_command = 0x9d;
             read_reply_command = 0x9e;
             read_reply_data_pos = new int[] { 0 };
