@@ -846,8 +846,8 @@ public enum ComfoAirCommandType {
             change_command = 0xd7;
             change_data_size = 8;
             change_data_pos = 6;
-            change_affected = new String[] { "enthalpy_temperatur", "enthalpy_humidity", "enthalpy_level",
-                    "menuP9#enthalpyState", "enthalpy_time" };
+            change_affected = new String[] { "enthalpy#enthalpyTemperature", "enthalpy#enthalpyHumidity", "enthalpy#enthalpyLevel",
+                    "menuP9#enthalpyState", "enthalpy#enthalpyTime" };
             read_command = 0xd5;
             read_reply_command = 0xd6;
             read_reply_data_pos = new int[] { 9 };
@@ -963,7 +963,7 @@ public enum ComfoAirCommandType {
 
     SOFTWARE_MAIN_VERSION {
         {
-            key = "software_main_version";
+            key = "software#softwareMainVersion";
             data_type = DataTypeNumber.class;
             read_command = 0x69;
             read_reply_command = 0x6a;
@@ -973,7 +973,7 @@ public enum ComfoAirCommandType {
 
     SOFTWARE_MINOR_VERSION {
         {
-            key = "software_minor_version";
+            key = "software#softwareMinorVersion";
             data_type = DataTypeNumber.class;
             read_command = 0x69;
             read_reply_command = 0x6a;
@@ -983,7 +983,7 @@ public enum ComfoAirCommandType {
 
     SOFTWARE_BETA_VERSION {
         {
-            key = "software_beta_version";
+            key = "software#softwareBetaVersion";
             data_type = DataTypeNumber.class;
             read_command = 0x69;
             read_reply_command = 0x6a;
@@ -1003,7 +1003,7 @@ public enum ComfoAirCommandType {
 
     ERRORA_CURRENT {
         {
-            key = "errorA_current";
+            key = "error#errorACurrent";
             data_type = DataTypeNumber.class;
             read_command = 0xd9;
             read_reply_command = 0xda;
@@ -1013,7 +1013,7 @@ public enum ComfoAirCommandType {
 
     ERRORA_LAST {
         {
-            key = "errorA_last";
+            key = "error#errorALast";
             data_type = DataTypeNumber.class;
             read_command = 0xd9;
             read_reply_command = 0xda;
@@ -1023,7 +1023,7 @@ public enum ComfoAirCommandType {
 
     ERRORA_PRELAST {
         {
-            key = "errorA_prelast";
+            key = "error#errorAPrelast";
             data_type = DataTypeNumber.class;
             read_command = 0xd9;
             read_reply_command = 0xda;
@@ -1033,7 +1033,7 @@ public enum ComfoAirCommandType {
 
     ERRORA_PREPRELAST {
         {
-            key = "errorA_preprelast";
+            key = "error#errorAPrePrelast";
             data_type = DataTypeNumber.class;
             read_command = 0xd9;
             read_reply_command = 0xda;
@@ -1043,7 +1043,7 @@ public enum ComfoAirCommandType {
 
     ERRORAHIGH_CURRENT {
         {
-            key = "errorAhigh_current";
+            key = "error#errorAHighCurrent";
             data_type = DataTypeNumber.class;
             read_command = 0xd9;
             read_reply_command = 0xda;
@@ -1053,7 +1053,7 @@ public enum ComfoAirCommandType {
 
     ERRORAHIGH_LAST {
         {
-            key = "errorAhigh_last";
+            key = "error#errorAHighLast";
             data_type = DataTypeNumber.class;
             read_command = 0xd9;
             read_reply_command = 0xda;
@@ -1063,7 +1063,7 @@ public enum ComfoAirCommandType {
 
     ERRORAHIGH_PRELAST {
         {
-            key = "errorAhigh_prelast";
+            key = "error#errorAHighPrelast";
             data_type = DataTypeNumber.class;
             read_command = 0xd9;
             read_reply_command = 0xda;
@@ -1073,7 +1073,7 @@ public enum ComfoAirCommandType {
 
     ERRORAHIGH_PREPRELAST {
         {
-            key = "errorAhigh_preprelast";
+            key = "error#errorAHighPrePrelast";
             data_type = DataTypeNumber.class;
             read_command = 0xd9;
             read_reply_command = 0xda;
@@ -1083,7 +1083,7 @@ public enum ComfoAirCommandType {
 
     ERRORE_CURRENT {
         {
-            key = "errorE_current";
+            key = "error#errorECurrent";
             data_type = DataTypeNumber.class;
             read_command = 0xd9;
             read_reply_command = 0xda;
@@ -1093,7 +1093,7 @@ public enum ComfoAirCommandType {
 
     ERRORE_LAST {
         {
-            key = "errorE_last";
+            key = "error#errorELast";
             data_type = DataTypeNumber.class;
             read_command = 0xd9;
             read_reply_command = 0xda;
@@ -1103,7 +1103,7 @@ public enum ComfoAirCommandType {
 
     ERRORE_PRELAST {
         {
-            key = "errorE_prelast";
+            key = "error#errorEPrelast";
             data_type = DataTypeNumber.class;
             read_command = 0xd9;
             read_reply_command = 0xda;
@@ -1113,7 +1113,7 @@ public enum ComfoAirCommandType {
 
     ERRORE_PREPRELAST {
         {
-            key = "errorE_preprelast";
+            key = "error#errorEPrePrelast";
             data_type = DataTypeNumber.class;
             read_command = 0xd9;
             read_reply_command = 0xda;
@@ -1123,7 +1123,7 @@ public enum ComfoAirCommandType {
 
     ERROREA_CURRENT {
         {
-            key = "errorEA_current";
+            key = "error#errorEACurrent";
             data_type = DataTypeNumber.class;
             read_command = 0xd9;
             read_reply_command = 0xda;
@@ -1133,7 +1133,7 @@ public enum ComfoAirCommandType {
 
     ERROREA_LAST {
         {
-            key = "errorEA_last";
+            key = "error#errorEALast";
             data_type = DataTypeNumber.class;
             read_command = 0xd9;
             read_reply_command = 0xda;
@@ -1143,7 +1143,7 @@ public enum ComfoAirCommandType {
 
     ERROREA_PRELAST {
         {
-            key = "errorEA_prelast";
+            key = "error#errorEAPrelast";
             data_type = DataTypeNumber.class;
             read_command = 0xd9;
             read_reply_command = 0xda;
@@ -1153,7 +1153,7 @@ public enum ComfoAirCommandType {
 
     ERROREA_PREPRELAST {
         {
-            key = "errorEA_preprelast";
+            key = "error#errorEAPrePrelast";
             data_type = DataTypeNumber.class;
             read_command = 0xd9;
             read_reply_command = 0xda;
@@ -1248,7 +1248,7 @@ public enum ComfoAirCommandType {
 
     ENTHALPY_TEMPERATUR {
         {
-            key = "enthalpy_temperatur";
+            key = "enthalpy#enthalpyTemperature";
             data_type = DataTypeTemperature.class;
             read_command = 0x97;
             read_reply_command = 0x98;
@@ -1258,7 +1258,7 @@ public enum ComfoAirCommandType {
 
     ENTHALPY_HUMIDITY {
         {
-            key = "enthalpy_humidity";
+            key = "enthalpy#enthalpyHumidity";
             data_type = DataTypeNumber.class;
             read_command = 0x97;
             read_reply_command = 0x98;
@@ -1268,7 +1268,7 @@ public enum ComfoAirCommandType {
 
     ENTHALPY_LEVEL {
         {
-            key = "enthalpy_level";
+            key = "enthalpy#enthalpyLevel";
             data_type = DataTypeNumber.class;
             read_command = 0x97;
             read_reply_command = 0x98;
@@ -1278,7 +1278,7 @@ public enum ComfoAirCommandType {
 
     ENTHALPY_TIME {
         {
-            key = "enthalpy_time";
+            key = "enthalpy#enthalpyTime";
             data_type = DataTypeNumber.class;
             read_command = 0x97;
             read_reply_command = 0x98;
@@ -1408,13 +1408,13 @@ public enum ComfoAirCommandType {
 
     IS_ANALOG1 {
         {
-            key = "is_analog1";
+            key = "analog#isAnalog1";
             data_type = DataTypeBoolean.class;
             possible_values = new int[] { 0x01 };
             change_command = 0x9f;
             change_data_size = 19;
             change_data_pos = 0;
-            change_affected = new String[] { "analog1_mode", "analog1_negative", "analog#analog1Min",
+            change_affected = new String[] { "analog#analog1Mode", "analog#analog1Negative", "analog#analog1Min",
                     "analog#analog1Max", "analog#analog1Value", "analog#analog1Volt" };
             read_command = 0x9d;
             read_reply_command = 0x9e;
@@ -1425,13 +1425,13 @@ public enum ComfoAirCommandType {
 
     IS_ANALOG2 {
         {
-            key = "is_analog2";
+            key = "analog#isAnalog2";
             data_type = DataTypeBoolean.class;
             possible_values = new int[] { 0x02 };
             change_command = 0x9f;
             change_data_size = 19;
             change_data_pos = 0;
-            change_affected = new String[] { "analog2_mode", "analog2_negative", "analog#analog2Min",
+            change_affected = new String[] { "analog#analog2Mode", "analog#analog2Negative", "analog#analog2Min",
                     "analog#analog2Max", "analog#analog2Value", "analog#analog2Volt" };
             read_command = 0x9d;
             read_reply_command = 0x9e;
@@ -1442,13 +1442,13 @@ public enum ComfoAirCommandType {
 
     IS_ANALOG3 {
         {
-            key = "is_analog3";
+            key = "analog#isAnalog3";
             data_type = DataTypeBoolean.class;
             possible_values = new int[] { 0x04 };
             change_command = 0x9f;
             change_data_size = 19;
             change_data_pos = 0;
-            change_affected = new String[] { "analog3_mode", "analog3_negative", "analog#analog3Min",
+            change_affected = new String[] { "analog#analog3Mode", "analog#analog3Negative", "analog#analog3Min",
                     "analog#analog3Max", "analog#analog3Value", "analog#analog3Volt" };
             read_command = 0x9d;
             read_reply_command = 0x9e;
@@ -1459,13 +1459,13 @@ public enum ComfoAirCommandType {
 
     IS_ANALOG4 {
         {
-            key = "is_analog4";
+            key = "analog#isAnalog4";
             data_type = DataTypeBoolean.class;
             possible_values = new int[] { 0x08 };
             change_command = 0x9f;
             change_data_size = 19;
             change_data_pos = 0;
-            change_affected = new String[] { "analog4_mode", "analog4_negative", "analog#analog4Min",
+            change_affected = new String[] { "analog#analog4Mode", "analog#analog4Negative", "analog#analog4Min",
                     "analog#analog4Max", "analog#analog4Value", "analog#analog4Volt" };
             read_command = 0x9d;
             read_reply_command = 0x9e;
@@ -1476,13 +1476,13 @@ public enum ComfoAirCommandType {
 
     IS_RF {
         {
-            key = "is_RF";
+            key = "analog#isRF";
             data_type = DataTypeBoolean.class;
             possible_values = new int[] { 0x10 };
             change_command = 0x9f;
             change_data_size = 19;
             change_data_pos = 0;
-            change_affected = new String[] { "RF_mode", "RF_negative", "RF_min", "RF_max", "RF_value" };
+            change_affected = new String[] { "analog#RFMode", "analog#RFNegative", "analog#RFMin", "analog#RFMax", "analog#RFValue" };
             read_command = 0x9d;
             read_reply_command = 0x9e;
             read_reply_data_pos = new int[] { 0 };
@@ -1492,13 +1492,13 @@ public enum ComfoAirCommandType {
 
     ANALOG1_MODE {
         {
-            key = "analog1_mode";
+            key = "analog#analog1Mode";
             data_type = DataTypeBoolean.class;
             possible_values = new int[] { 0x01 };
             change_command = 0x9f;
             change_data_size = 19;
             change_data_pos = 1;
-            change_affected = new String[] { "analog1_negative", "analog#analog1Min", "analog#analog1Max",
+            change_affected = new String[] { "analog#analog1Negative", "analog#analog1Min", "analog#analog1Max",
                     "analog#analog1Value", "analog#analog1Volt" };
             read_command = 0x9d;
             read_reply_command = 0x9e;
@@ -1509,13 +1509,13 @@ public enum ComfoAirCommandType {
 
     ANALOG2_MODE {
         {
-            key = "analog2_mode";
+            key = "analog#analog2Mode";
             data_type = DataTypeBoolean.class;
             possible_values = new int[] { 0x02 };
             change_command = 0x9f;
             change_data_size = 19;
             change_data_pos = 1;
-            change_affected = new String[] { "analog2_negative", "analog#analog2Min", "analog#analog2Max",
+            change_affected = new String[] { "analog#analog2Negative", "analog#analog2Min", "analog#analog2Max",
                     "analog#analog2Value", "analog#analog2Volt" };
             read_command = 0x9d;
             read_reply_command = 0x9e;
@@ -1526,13 +1526,13 @@ public enum ComfoAirCommandType {
 
     ANALOG3_MODE {
         {
-            key = "analog3_mode";
+            key = "analog#analog3Mode";
             data_type = DataTypeBoolean.class;
             possible_values = new int[] { 0x04 };
             change_command = 0x9f;
             change_data_size = 19;
             change_data_pos = 1;
-            change_affected = new String[] { "analog3_negative", "analog#analog3Min", "analog#analog3Max",
+            change_affected = new String[] { "analog#analog3Negative", "analog#analog3Min", "analog#analog3Max",
                     "analog#analog3Value", "analog#analog3Volt" };
             read_command = 0x9d;
             read_reply_command = 0x9e;
@@ -1543,13 +1543,13 @@ public enum ComfoAirCommandType {
 
     ANALOG4_MODE {
         {
-            key = "analog4_mode";
+            key = "analog#analog4Mode";
             data_type = DataTypeBoolean.class;
             possible_values = new int[] { 0x08 };
             change_command = 0x9f;
             change_data_size = 19;
             change_data_pos = 1;
-            change_affected = new String[] { "analog4_negative", "analog#analog4Min", "analog#analog4Max",
+            change_affected = new String[] { "analog#analog4Negative", "analog#analog4Min", "analog#analog4Max",
                     "analog#analog4Value", "analog#analog4Volt" };
             read_command = 0x9d;
             read_reply_command = 0x9e;
@@ -1560,13 +1560,13 @@ public enum ComfoAirCommandType {
 
     RF_MODE {
         {
-            key = "RF_mode";
+            key = "analog#RFMode";
             data_type = DataTypeBoolean.class;
             possible_values = new int[] { 0x10 };
             change_command = 0x9f;
             change_data_size = 19;
             change_data_pos = 1;
-            change_affected = new String[] { "RF_negative", "RF_min", "RF_max", "RF_value" };
+            change_affected = new String[] { "analog#RFNegative", "analog#RFMin", "analog#RFMax", "analog#RFValue" };
             read_command = 0x9d;
             read_reply_command = 0x9e;
             read_reply_data_pos = new int[] { 1 };
@@ -1576,7 +1576,7 @@ public enum ComfoAirCommandType {
 
     ANALOG1_NEGATIVE {
         {
-            key = "analog1_negative";
+            key = "analog#analog1Negative";
             data_type = DataTypeBoolean.class;
             possible_values = new int[] { 0x01 };
             change_command = 0x9f;
@@ -1592,7 +1592,7 @@ public enum ComfoAirCommandType {
 
     ANALOG2_NEGATIVE {
         {
-            key = "analog2_negative";
+            key = "analog#analog2Negative";
             data_type = DataTypeBoolean.class;
             possible_values = new int[] { 0x02 };
             change_command = 0x9f;
@@ -1608,7 +1608,7 @@ public enum ComfoAirCommandType {
 
     ANALOG3_NEGATIVE {
         {
-            key = "analog3_negative";
+            key = "analog#analog3Negative";
             data_type = DataTypeBoolean.class;
             possible_values = new int[] { 0x04 };
             change_command = 0x9f;
@@ -1624,7 +1624,7 @@ public enum ComfoAirCommandType {
 
     ANALOG4_NEGATIVE {
         {
-            key = "analog4_negative";
+            key = "analog#analog4Negative";
             data_type = DataTypeBoolean.class;
             possible_values = new int[] { 0x08 };
             change_command = 0x9f;
@@ -1640,7 +1640,7 @@ public enum ComfoAirCommandType {
 
     RF_NEGATIVE {
         {
-            key = "RF_negative";
+            key = "analog#RFNegative";
             data_type = DataTypeBoolean.class;
             possible_values = new int[] { 0x10 };
             change_command = 0x9f;
@@ -1824,7 +1824,7 @@ public enum ComfoAirCommandType {
 
     RF_MIN {
         {
-            key = "RF_min";
+            key = "analog#RFMin";
             data_type = DataTypeNumber.class;
             change_command = 0x9f;
             change_data_size = 19;
@@ -1838,7 +1838,7 @@ public enum ComfoAirCommandType {
 
     RF_MAX {
         {
-            key = "RF_max";
+            key = "analog#RFMax";
             data_type = DataTypeNumber.class;
             change_command = 0x9f;
             change_data_size = 19;
@@ -1852,7 +1852,7 @@ public enum ComfoAirCommandType {
 
     RF_VALUE {
         {
-            key = "RF_value";
+            key = "analog#RFValue";
             data_type = DataTypeNumber.class;
             change_command = 0x9f;
             change_data_size = 19;

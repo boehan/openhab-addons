@@ -15,7 +15,7 @@
 						<channel-group id="temperatures" typeId="temperatures" />
 						<channel-group id="times" typeId="times" />
 						<channel-group id="bypass" typeId="bypass" />
-						<!-- <channel-group id="preheater" typeId="preheater" /> -->
+						<channel-group id="preheater" typeId="preheater" />
 						<channel-group id="ewt" typeId="ewt" />
 						<channel-group id="heater" typeId="heater" />
 						<channel-group id="cookerhood" typeId="cookerhood" />
@@ -24,6 +24,9 @@
 						<channel-group id="menuP2" typeId="menuP2" />
 						<channel-group id="menuP9" typeId="menuP9" />
 						<channel-group id="inputs" typeId="inputs" />
+						<channel-group id="analog" typeId="analog" />
+						<channel-group id="error" typeId="error" />
+						<channel-group id="software" typeId="software" />
 				</channel-groups>
 
 				<config-description>
@@ -121,7 +124,7 @@
 						<channel id="bypassSummer" typeId="bypass_summer" />
 				</channels>
 		</channel-group-type>
-<!--
+
 		<channel-group-type id="preheater">
 				<label>Preheater values</label>
 				<channels>
@@ -132,7 +135,7 @@
 						<channel id="preheaterSafety" typeId="preheater_safety" />
 				</channels>
 		</channel-group-type>
--->
+
 		<channel-group-type id="ewt">
 				<label>EWT values</label>
 				<channels>
@@ -155,6 +158,16 @@
 				<label>Cookerhood values</label>
 				<channels>
 						<channel id="cookerhoodSpeed" typeId="cookerhood_speed" />
+				</channels>
+		</channel-group-type>
+
+		<channel-group-type id="enthalpy">
+				<label>Heater values</label>
+				<channels>
+						<channel id="enthalpyTemperature" typeId="enthalpy_temperature" />
+						<channel id="enthalpyHumidity" typeId="enthalpy_humidity" />
+						<channel id="enthalpyLevel" typeId="enthalpy_level" />
+						<channel id="enthalpyTime" typeId="enthalpy_time" />
 				</channels>
 		</channel-group-type>
 
@@ -230,11 +243,24 @@
 				</channels>
 		</channel-group-type>
 
-<!-- TODO: analog & RF channel implementation
 		<channel-group-type id="analog">
 				<label>Analog inputs</label>
 				<channels>
-						<channel id="analogMode" typeId="analog_mode" />
+						<channel id="isAnalog1" typeId="is_analog1" />
+						<channel id="isAnalog2" typeId="is_analog2" />
+						<channel id="isAnalog3" typeId="is_analog3" />
+						<channel id="isAnalog4" typeId="is_analog4" />
+						<channel id="isRF" typeId="is_RF" />
+						<channel id="analog1Mode" typeId="analog1_mode" />
+						<channel id="analog2Mode" typeId="analog2_mode" />
+						<channel id="analog3Mode" typeId="analog3_mode" />
+						<channel id="analog4Mode" typeId="analog4_mode" />
+						<channel id="RFMode" typeId="RF_mode" />
+						<channel id="analog1Negative" typeId="analog1_negative" />
+						<channel id="analog2Negative" typeId="analog2_negative" />
+						<channel id="analog3Negative" typeId="analog3_negative" />
+						<channel id="analog4Negative" typeId="analog4_negative" />
+						<channel id="RFNegative" typeId="RF_negative" />
 						<channel id="analog1Volt" typeId="analog1_volt" />
 						<channel id="analog1Min" typeId="analog1_min" />
 						<channel id="analog1Max" typeId="analog1_max" />
@@ -251,10 +277,42 @@
 						<channel id="analog4Min" typeId="analog4_min" />
 						<channel id="analog4Max" typeId="analog4_max" />
 						<channel id="analog4Value" typeId="analog4_value" />
+						<channel id="RFMin" typeId="RF_min" />
+						<channel id="RFMax" typeId="RF_max" />
+						<channel id="RFValue" typeId="RF_value" />
 				</channels>
 		</channel-group-type>
--->
-<!-- TODO: additional error state channels -->
+
+		<channel-group-type id="error">
+				<label>Error States</label>
+				<channels>
+						<channel id="errorACurrent" typeId="errorA_current" />
+						<channel id="errorECurrent" typeId="errorE_current" />
+						<channel id="errorALast" typeId="errorA_last" />
+						<channel id="errorELast" typeId="errorE_last" />
+						<channel id="errorAPrelast" typeId="errorA_prelast" />
+						<channel id="errorEPrelast" typeId="errorE_prelast" />
+						<channel id="errorAPrePrelast" typeId="errorA_pre_prelast" />
+						<channel id="errorEPrePrelast" typeId="errorE_pre_prelast" />
+						<channel id="errorEACurrent" typeId="errorEA_current" />
+						<channel id="errorEALast" typeId="errorEA_last" />
+						<channel id="errorEAPrelast" typeId="errorEA_prelast" />
+						<channel id="errorEAPrePrelast" typeId="errorEA_pre_prelast" />
+						<channel id="errorAHighCurrent" typeId="errorA_high_current" />
+						<channel id="errorAHighLast" typeId="errorA_high_last" />
+						<channel id="errorAHighPrelast" typeId="errorA_high_prelast" />
+						<channel id="errorAHighPrePrelast" typeId="errorA_high_pre_prelast" />
+				</channels>
+		</channel-group-type>
+
+		<channel-group-type id="software">
+				<label>Software Version</label>
+				<channels>
+						<channel id="softwareMainVersion" typeId="software_main_version" />
+						<channel id="softwareMinorVersion" typeId="software_minor_version" />
+						<channel id="softwareBetaVersion" typeId="software_beta_version" />
+				</channels>
+		</channel-group-type>
 
 		<channel-type id="activate">
 				<item-type>Switch</item-type>
@@ -783,6 +841,38 @@
 				<state readOnly="true"/>
 		</channel-type>
 
+		<channel-type id="enthalpy_temperature" advanced="true">
+				<item-type>Number:Temperature</item-type>
+				<label>Enthalpy Sensor Temperature</label>
+				<description>Temperature of the enthalpy sensor</description>
+				<category>Temperature</category>
+				<state readOnly="true" pattern="%.1f %unit%"/>
+		</channel-type>
+
+		<channel-type id="enthalpy_humidity" advanced="true">
+				<item-type>Number</item-type>
+				<label>Enthalpy Sensor Humidity</label>
+				<description>Humidity of the enthalpy sensor</description>
+				<category>Humidity</category>
+				<state readOnly="true"/>
+		</channel-type>
+
+		<channel-type id="enthalpy_level" advanced="true">
+				<item-type>Number</item-type>
+				<label>Enthalpy Sensor Level</label>
+				<description>Level of the enthalpy sensor</description>
+				<category>Number</category>
+				<state readOnly="true"/>
+		</channel-type>
+
+		<channel-type id="enthalpy_time" advanced="true">
+				<item-type>Number</item-type>
+				<label>Enthalpy Sensor Timer</label>
+				<description>Timer state of the enthalpy sensor</description>
+				<category>Time</category>
+				<state readOnly="true"/>
+		</channel-type>
+
 		<channel-type id="is_preheater" advanced="true">
 				<item-type>Switch</item-type>
 				<label>Preheater</label>
@@ -1064,6 +1154,422 @@
 				<description>Period for pulse ventilation (min)</description>
 				<category>Time</category>
 				<state min="0" max="120" step="1" readOnly="false" />
+		</channel-type>
+
+		<channel-type id="is_analog1" advanced="true">
+				<item-type>Switch</item-type>
+				<label>Analog Input 1 Availability</label>
+				<description>Availability of analog input 1</description>
+				<category>Switch</category>
+				<state readOnly="false"/>
+		</channel-type>
+
+		<channel-type id="is_analog2" advanced="true">
+				<item-type>Switch</item-type>
+				<label>Analog Input 2 Availability</label>
+				<description>Availability of analog input 2</description>
+				<category>Switch</category>
+				<state readOnly="false"/>
+		</channel-type>
+
+		<channel-type id="is_analog3" advanced="true">
+				<item-type>Switch</item-type>
+				<label>Analog Input 3 Availability</label>
+				<description>Availability of analog input 3</description>
+				<category>Switch</category>
+				<state readOnly="false"/>
+		</channel-type>
+
+		<channel-type id="is_RF" advanced="true">
+				<item-type>Switch</item-type>
+				<label>RF Input Availability</label>
+				<description>Availability of RF input</description>
+				<category>Switch</category>
+				<state readOnly="false"/>
+		</channel-type>
+
+		<channel-type id="analog1_mode" advanced="true">
+				<item-type>Switch</item-type>
+				<label>Analog Input 1 State</label>
+				<description>State of analog input 1</description>
+				<category>Switch</category>
+				<state readOnly="false"/>
+		</channel-type>
+
+		<channel-type id="analog2_mode" advanced="true">
+				<item-type>Switch</item-type>
+				<label>Analog Input 2 State</label>
+				<description>State of analog input 2</description>
+				<category>Switch</category>
+				<state readOnly="false"/>
+		</channel-type>
+
+		<channel-type id="analog3_mode" advanced="true">
+				<item-type>Switch</item-type>
+				<label>Analog Input 3 State</label>
+				<description>State of analog input 3</description>
+				<category>Switch</category>
+				<state readOnly="false"/>
+		</channel-type>
+
+		<channel-type id="analog4_mode" advanced="true">
+				<item-type>Switch</item-type>
+				<label>Analog Input 4 State</label>
+				<description>State of analog input 1</description>
+				<category>Switch</category>
+				<state readOnly="false"/>
+		</channel-type>
+
+		<channel-type id="RF_mode" advanced="true">
+				<item-type>Switch</item-type>
+				<label>RF Input State</label>
+				<description>State of RF input</description>
+				<category>Switch</category>
+				<state readOnly="false"/>
+		</channel-type>
+
+		<channel-type id="analog1_negative" advanced="true">
+				<item-type>Switch</item-type>
+				<label>Analog Input 1 Postive/Negative</label>
+				<description>Postive/Negative state of analog input 1</description>
+				<category>Switch</category>
+				<state readOnly="false"/>
+		</channel-type>
+
+		<channel-type id="analog2_negative" advanced="true">
+				<item-type>Switch</item-type>
+				<label>Analog Input 2 Postive/Negative</label>
+				<description>Postive/Negative state of analog input 2</description>
+				<category>Switch</category>
+				<state readOnly="false"/>
+		</channel-type>
+
+		<channel-type id="analog3_negative" advanced="true">
+				<item-type>Switch</item-type>
+				<label>Analog Input 3 Postive/Negative</label>
+				<description>Postive/Negative state of analog input 3</description>
+				<category>Switch</category>
+				<state readOnly="false"/>
+		</channel-type>
+
+		<channel-type id="analog4_negative" advanced="true">
+				<item-type>Switch</item-type>
+				<label>Analog Input 4 Postive/Negative</label>
+				<description>Postive/Negative state of analog input 1</description>
+				<category>Switch</category>
+				<state readOnly="false"/>
+		</channel-type>
+
+		<channel-type id="RF_negative" advanced="true">
+				<item-type>Switch</item-type>
+				<label>RF Input Postive/Negative</label>
+				<description>Postive/Negative state of RF input</description>
+				<category>Switch</category>
+				<state readOnly="false"/>
+		</channel-type>
+
+		<channel-type id="analog1_volt" advanced="true">
+				<item-type>Number:ElectricPotential</item-type>
+				<label>Analog Input 1 Voltage Level</label>
+				<description>Voltage level of analog input 1</description>
+				<category>Number</category>
+				<state readOnly="true"/>
+		</channel-type>
+
+		<channel-type id="analog1_min" advanced="true">
+				<item-type>Number</item-type>
+				<label>Analog Input 1 Min</label>
+				<description>Minimum setting for analog input 1</description>
+				<category>Number</category>
+				<state readOnly="false"/>
+		</channel-type>
+
+		<channel-type id="analog1_max" advanced="true">
+				<item-type>Number</item-type>
+				<label>Analog Input 1 Max</label>
+				<description>Maximum setting for analog input 1</description>
+				<category>Number</category>
+				<state readOnly="false"/>
+		</channel-type>
+
+		<channel-type id="analog1_value" advanced="true">
+				<item-type>Number</item-type>
+				<label>Analog Input 1 Target</label>
+				<description>Target setting for analog input 1</description>
+				<category>Number</category>
+				<state readOnly="false"/>
+		</channel-type>
+
+		<channel-type id="analog2_volt" advanced="true">
+				<item-type>Number:ElectricPotential</item-type>
+				<label>Analog Input 2 Voltage Level</label>
+				<description>Voltage level of analog input 2</description>
+				<category>Number</category>
+				<state readOnly="true"/>
+		</channel-type>
+
+		<channel-type id="analog2_min" advanced="true">
+				<item-type>Number</item-type>
+				<label>Analog Input 2 Min</label>
+				<description>Minimum setting for analog input 2</description>
+				<category>Number</category>
+				<state readOnly="false"/>
+		</channel-type>
+
+		<channel-type id="analog2_max" advanced="true">
+				<item-type>Number</item-type>
+				<label>Analog Input 2 Max</label>
+				<description>Maximum setting for analog input 2</description>
+				<category>Number</category>
+				<state readOnly="false"/>
+		</channel-type>
+
+		<channel-type id="analog2_value" advanced="true">
+				<item-type>Number</item-type>
+				<label>Analog Input 2 Target</label>
+				<description>Target setting for analog input 2</description>
+				<category>Number</category>
+				<state readOnly="false"/>
+		</channel-type>
+
+		<channel-type id="analog3_volt" advanced="true">
+				<item-type>Number:ElectricPotential</item-type>
+				<label>Analog Input 3 Voltage Level</label>
+				<description>Voltage level of analog input 3</description>
+				<category>Number</category>
+				<state readOnly="true"/>
+		</channel-type>
+
+		<channel-type id="analog3_min" advanced="true">
+				<item-type>Number</item-type>
+				<label>Analog Input 3 Min</label>
+				<description>Minimum setting for analog input 3</description>
+				<category>Number</category>
+				<state readOnly="false"/>
+		</channel-type>
+
+		<channel-type id="analog3_max" advanced="true">
+				<item-type>Number</item-type>
+				<label>Analog Input 3 Max</label>
+				<description>Maximum setting for analog input 3</description>
+				<category>Number</category>
+				<state readOnly="false"/>
+		</channel-type>
+
+		<channel-type id="analog3_value" advanced="true">
+				<item-type>Number</item-type>
+				<label>Analog Input 3 Target</label>
+				<description>Target setting for analog input 3</description>
+				<category>Number</category>
+				<state readOnly="false"/>
+		</channel-type>
+
+		<channel-type id="analog4_volt" advanced="true">
+				<item-type>Number:ElectricPotential</item-type>
+				<label>Analog Input 4 Voltage Level</label>
+				<description>Voltage level of analog input 4</description>
+				<category>Number</category>
+				<state readOnly="true"/>
+		</channel-type>
+
+		<channel-type id="analog4_min" advanced="true">
+				<item-type>Number</item-type>
+				<label>Analog Input 4 Min</label>
+				<description>Minimum setting for analog input 4</description>
+				<category>Number</category>
+				<state readOnly="false"/>
+		</channel-type>
+
+		<channel-type id="analog4_max" advanced="true">
+				<item-type>Number</item-type>
+				<label>Analog Input 4 Max</label>
+				<description>Maximum setting for analog input 4</description>
+				<category>Number</category>
+				<state readOnly="false"/>
+		</channel-type>
+
+		<channel-type id="analog4_value" advanced="true">
+				<item-type>Number</item-type>
+				<label>Analog Input 4 Target</label>
+				<description>Target setting for analog input 4</description>
+				<category>Number</category>
+				<state readOnly="false"/>
+		</channel-type>
+
+		<channel-type id="RF_min" advanced="true">
+				<item-type>Number</item-type>
+				<label>RF Input Min</label>
+				<description>Minimum setting for RF input</description>
+				<category>Number</category>
+				<state readOnly="false"/>
+		</channel-type>
+
+		<channel-type id="RF_max" advanced="true">
+				<item-type>Number</item-type>
+				<label>RF Input Max</label>
+				<description>Maximum setting for RF input</description>
+				<category>Number</category>
+				<state readOnly="false"/>
+		</channel-type>
+
+		<channel-type id="RF_value" advanced="true">
+				<item-type>Number</item-type>
+				<label>RF Input Target</label>
+				<description>Target setting for RF input</description>
+				<category>Number</category>
+				<state readOnly="false"/>
+		</channel-type>
+
+		<channel-type id="errorA_current">
+				<item-type>String</item-type>
+				<label>Error A Current</label>
+				<description>Current error A</description>
+				<category>Text</category>
+				<state readOnly="true" />
+		</channel-type>
+
+		<channel-type id="errorE_current">
+				<item-type>String</item-type>
+				<label>Error E Current</label>
+				<description>Current error E</description>
+				<category>Text</category>
+				<state readOnly="true" />
+		</channel-type>
+
+		<channel-type id="errorA_last">
+				<item-type>String</item-type>
+				<label>Error A Last</label>
+				<description>Last error A</description>
+				<category>Text</category>
+				<state readOnly="true" />
+		</channel-type>
+
+		<channel-type id="errorE_last">
+				<item-type>String</item-type>
+				<label>Error E Last</label>
+				<description>Last error E</description>
+				<category>Text</category>
+				<state readOnly="true" />
+		</channel-type>
+
+		<channel-type id="errorA_prelast">
+				<item-type>String</item-type>
+				<label>Error A Prelast</label>
+				<description>Prelast error A</description>
+				<category>Text</category>
+				<state readOnly="true" />
+		</channel-type>
+
+		<channel-type id="errorE_prelast">
+				<item-type>String</item-type>
+				<label>Error E Prelast</label>
+				<description>Prelast error E</description>
+				<category>Text</category>
+				<state readOnly="true" />
+		</channel-type>
+
+		<channel-type id="errorA_pre_prelast">
+				<item-type>String</item-type>
+				<label>Error A Pre-Prelast</label>
+				<description>Pre-Prelast error A</description>
+				<category>Text</category>
+				<state readOnly="true" />
+		</channel-type>
+
+		<channel-type id="errorE_pre_prelast">
+				<item-type>String</item-type>
+				<label>Error E Pre-Prelast</label>
+				<description>Pre-Prelast error E</description>
+				<category>Text</category>
+				<state readOnly="true" />
+		</channel-type>
+
+		<channel-type id="errorEA_current">
+				<item-type>String</item-type>
+				<label>Error EA Current</label>
+				<description>Current error EA</description>
+				<category>Text</category>
+				<state readOnly="true" />
+		</channel-type>
+
+		<channel-type id="errorEA_last">
+				<item-type>String</item-type>
+				<label>Error EA Last</label>
+				<description>Last error EA</description>
+				<category>Text</category>
+				<state readOnly="true" />
+		</channel-type>
+
+		<channel-type id="errorEA_prelast">
+				<item-type>String</item-type>
+				<label>Error EA Prelast</label>
+				<description>Prelast error EA</description>
+				<category>Text</category>
+				<state readOnly="true" />
+		</channel-type>
+
+		<channel-type id="errorEA_pre_prelast">
+				<item-type>String</item-type>
+				<label>Error EA Pre-Prelast</label>
+				<description>Pre-Prelast error EA</description>
+				<category>Text</category>
+				<state readOnly="true" />
+		</channel-type>
+
+		<channel-type id="errorA_high_current">
+				<item-type>String</item-type>
+				<label>Error A (high) Current</label>
+				<description>Current error A (high)</description>
+				<category>Text</category>
+				<state readOnly="true" />
+		</channel-type>
+
+		<channel-type id="errorA_high_last">
+				<item-type>String</item-type>
+				<label>Error A (high) Last</label>
+				<description>Last error A (high)</description>
+				<category>Text</category>
+				<state readOnly="true" />
+		</channel-type>
+
+		<channel-type id="errorA_high_prelast">
+				<item-type>String</item-type>
+				<label>Error A (high) Prelast</label>
+				<description>Prelast error A (high)</description>
+				<category>Text</category>
+				<state readOnly="true" />
+		</channel-type>
+
+		<channel-type id="errorA_high_pre_prelast">
+				<item-type>String</item-type>
+				<label>Error A (high) Pre-Prelast</label>
+				<description>Pre-Prelast error A (high)</description>
+				<category>Text</category>
+				<state readOnly="true" />
+		</channel-type>
+
+		<channel-type id="software_main_version" advanced="true">
+				<item-type>Number</item-type>
+				<label>Software Main Version</label>
+				<description>Main version of the device software</description>
+				<category>Number</category>
+				<state readOnly="true" />
+		</channel-type>
+
+		<channel-type id="software_minor_version" advanced="true">
+				<item-type>Number</item-type>
+				<label>Software Minor Version</label>
+				<description>Minor version of the device software</description>
+				<category>Number</category>
+				<state readOnly="true" />
+		</channel-type>
+
+		<channel-type id="software_beta_version" advanced="true">
+				<item-type>Number</item-type>
+				<label>Software Beta Version</label>
+				<description>Beta version of the device software</description>
+				<category>Number</category>
+				<state readOnly="true" />
 		</channel-type>
 
 </thing:thing-descriptions>
